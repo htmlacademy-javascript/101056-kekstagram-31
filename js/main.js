@@ -1,4 +1,5 @@
-const PHOTO_ID_COUNT_MAX = 25; // необходимое кол-во объектов
+const PHOTO_ID_FROM = 1; // идентификаторы фото от/до
+const PHOTO_ID_TO = 25;
 const PHOTO_PATH = 'photos/'; // адрес папки с фото
 const PHOTO_LIKES_MIN = 15; // кол-во лайков
 const PHOTO_LIKES_MAX = 200;
@@ -7,11 +8,11 @@ const PHOTO_DESCRIPTION_MAX_LENGTH = 100;
 const COMMENTS_AVATAR_PATH = 'img/'; // адрес папки с аватарками
 const AVATAR_COUNTS_MIN = 1; // кол-во аватарок
 const AVATAR_COUNTS_MAX = 6;
-const COMMENTS_ID_LENGTH = 6; // длинна случайного идентификатора комментария
 const COMMENTS_COUNT_MIN = 0; // кол-во комментариев к объекту
 const COMMENTS_COUNT_MAX = 30;
 const COMMENT_MESSEGES_COUNT_MAX = 2; // кол-во случайных строк из которых собираются комментарии
- // тут хранятся ID комментариев для проверки их на уникальность
+const COMMENTS_ID_FROM = PHOTO_ID_FROM * COMMENTS_COUNT_MIN; // идентификаторы комментариев от/до
+const COMMENTS_ID_TO = PHOTO_ID_TO * COMMENTS_COUNT_MAX;
 const PHOTO_DATA = []; // сюда записывается результат всех операций
 
 const USER_MESSEGES = [
@@ -36,106 +37,37 @@ const USER_NAMES = [
 ];
 
 
-function getRandomNumber (from, before) {
-  const LOWER = Math.ceil(Math.min(from, before));
-  const UPPER = Math.floor(Math.max(from, before));
+function getRandomNumber (from, to) {
+  const LOWER = Math.ceil(Math.min(from, to));
+  const UPPER = Math.floor(Math.max(from, to));
   const RESULT = Math.random() * (UPPER - LOWER + 1) + LOWER;
   return Math.floor(RESULT);
-}
-// console.log(getRandomNumber(5, 10));
-
-
-function getNewID () {
-  let lastGeneratedId = 0;
-
-  return function () {
-    lastGeneratedId += 1;
-    return lastGeneratedId;
-  };
-}
-
-
-const getPhotoID = getNewID();
-const getPhotoPathID = getNewID();
-
-
-function getPhotoURL (path) {
-  const URL = `${path + getPhotoPathID()}.jpg`;
-  return URL;
 }
 
 
 function getRandomString (desiredStringLength = 1) {
-  const PRIMER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const PRIMER = ' ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let randomString = '';
   for (let i = 0; i < desiredStringLength; i++) {
     randomString += PRIMER.charAt(Math.floor(Math.random() * PRIMER.length));
   }
   return randomString;
 }
-// console.log(getRandomString(5));
 
 
-function getDescription (){
-  return getRandomString(getRandomNumber(PHOTO_DESCRIPTION_MIN_LENGTH, PHOTO_DESCRIPTION_MAX_LENGTH));
+function getUniqueID(from, to) {
+  let id = from;
+  const IDS = new Set();
+  return function (){
+    while (IDS.has(id)) {
+      id = getRandomNumber(from, to);
+    }
+    IDS.add(id);
+    return id;
+  };
 }
-// console.log(getDescription());
-
-
-function getRandomUserName () {
-  const RANDOM_NAME_INDEX = getRandomNumber(0, USER_NAMES.length - 1);
-  return USER_NAMES[RANDOM_NAME_INDEX];
-}
-// console.log(getRandomUserName());
-
-
-function getRandomLikesCount () {
-  return getRandomNumber(PHOTO_LIKES_MIN, PHOTO_LIKES_MAX);
-}
-// console.log(getRandomLikesCount());
-
-
-function getAvatarImgURL () {
-  return `${COMMENTS_AVATAR_PATH}avatar-${getRandomNumber(AVATAR_COUNTS_MIN, AVATAR_COUNTS_MAX)}`;
-}
-// console.log(getAvatarImgURL());
-
-const COMMENTS_IDS = new Set();
-function getID(length) {
-  let id = '';
-  for (let i = 0; i < length; i++) {
-    id += getRandomNumber(0,9);
-  }
-  return id;
-}
-// console.log(getID(COMMENTS_ID_LENGTH));
-
-
-//==============================================
-// у меня тут несколько вариантов, мне сказали что первый вариант работает несовсем верно, но я пока не понимаю почему
-
-// function getUniqueCommentID (){
-//   const id = getID(COMMENTS_ID_LENGTH);
-//   while (!COMMENTS_IDS.has(id)) {
-//     COMMENTS_IDS.add(id);
-//     break;
-//   }
-//   return id;
-// }
-function getUniqueCommentID (){
-  let id = getID(COMMENTS_ID_LENGTH);
-  while (COMMENTS_IDS.has(id)) {
-    id = getID(COMMENTS_ID_LENGTH);
-  }
-  COMMENTS_IDS.add(id);
-  return id;
-}
-// const simulationUniqueCommentsID = Array.from({length: 100}, getUniqueCommentID);
-// console.log(simulationUniqueCommentsID);
-
-// console.log(getUniqueCommentID());
-// console.log(COMMENTS_IDS);
-//==============================================
+const getUniquePhotoID = getUniqueID(PHOTO_ID_FROM, PHOTO_ID_TO);
+const getUniqueCommentID = getUniqueID(COMMENTS_ID_FROM, COMMENTS_ID_TO);
 
 
 function getCommentMessage (count){
@@ -146,23 +78,20 @@ function getCommentMessage (count){
   }
   return message;
 }
-// console.log(getCommentMessage(COMMENT_MESSEGES_COUNT_MAX));
 
 
 function getComment (){
   return {
     id: getUniqueCommentID(),
-    avatar: getAvatarImgURL(),
+    avatar: `${COMMENTS_AVATAR_PATH}avatar-${getRandomNumber(AVATAR_COUNTS_MIN, AVATAR_COUNTS_MAX)}.svg`,
     message: getCommentMessage(COMMENT_MESSEGES_COUNT_MAX),
-    name: getRandomUserName()
+    name: USER_NAMES[getRandomNumber(0, USER_NAMES.length - 1)]
   };
 }
-// console.log(getComment());
 
 
 function getCommentsArray (){
   const COUNT_COMMENTS = getRandomNumber(COMMENTS_COUNT_MIN, COMMENTS_COUNT_MAX);
-  // console.log(COUNT_COMMENTS);
   const COMMENTS = [];
   for (let i = 0; i < COUNT_COMMENTS; i++){
     const NEW_COMMENT = getComment();
@@ -170,26 +99,25 @@ function getCommentsArray (){
   }
   return COMMENTS;
 }
-// console.log(getCommentsArray());
 
 
 function getOnePhotoData (){
+  const PHOTO_ID = getUniquePhotoID();
   return {
-    id: getPhotoID(),
-    url: getPhotoURL(PHOTO_PATH),
-    description: getDescription(),
-    likes: getRandomLikesCount(),
+    id: PHOTO_ID,
+    url: `${PHOTO_PATH + PHOTO_ID}.jpg`,
+    description: getRandomString(getRandomNumber(PHOTO_DESCRIPTION_MIN_LENGTH, PHOTO_DESCRIPTION_MAX_LENGTH)),
+    likes: getRandomNumber(PHOTO_LIKES_MIN, PHOTO_LIKES_MAX),
     comments: getCommentsArray()
   };
 }
-// console.log(getOnePhotoData());
 
 
 function getPhotoData (){
-  for (let i = 0; i < PHOTO_ID_COUNT_MAX; i++) {
+  for (let i = 0; i < PHOTO_ID_TO; i++) {
     const NEW_PHOTO_DATA = getOnePhotoData();
     PHOTO_DATA.push(NEW_PHOTO_DATA);
   }
   return PHOTO_DATA;
 }
-// console.table(getPhotoData()); // результат всех операций
+console.table(getPhotoData()); // результат всех операций
