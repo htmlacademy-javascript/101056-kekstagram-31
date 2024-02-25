@@ -11,7 +11,7 @@ const COMMENTS_ID_LENGTH = 6; // длинна случайного иденти�
 const COMMENTS_COUNT_MIN = 0; // кол-во комментариев к объекту
 const COMMENTS_COUNT_MAX = 30;
 const COMMENT_MESSEGES_COUNT_MAX = 2; // кол-во случайных строк из которых собираются комментарии
-const COMMENTS_IDS = new Set(); // тут хранятся ID комментариев для проверки их на уникальность
+ // тут хранятся ID комментариев для проверки их на уникальность
 const PHOTO_DATA = []; // сюда записывается результат всех операций
 
 const USER_MESSEGES = [
@@ -100,27 +100,42 @@ function getAvatarImgURL () {
 }
 // console.log(getAvatarImgURL());
 
-
+const COMMENTS_IDS = new Set();
 function getID(length) {
   let id = '';
   for (let i = 0; i < length; i++) {
-    id += getRandomNumber(1,9);
+    id += getRandomNumber(0,9);
   }
   return id;
 }
 // console.log(getID(COMMENTS_ID_LENGTH));
 
 
+//==============================================
+// у меня тут несколько вариантов, мне сказали что первый вариант работает несовсем верно, но я пока не понимаю почему
+
+// function getUniqueCommentID (){
+//   const id = getID(COMMENTS_ID_LENGTH);
+//   while (!COMMENTS_IDS.has(id)) {
+//     COMMENTS_IDS.add(id);
+//     break;
+//   }
+//   return id;
+// }
 function getUniqueCommentID (){
-  const id = getID(COMMENTS_ID_LENGTH);
-  while (!COMMENTS_IDS.has(id)) {
-    COMMENTS_IDS.add(id);
-    break;
+  let id = getID(COMMENTS_ID_LENGTH);
+  while (COMMENTS_IDS.has(id)) {
+    id = getID(COMMENTS_ID_LENGTH);
   }
+  COMMENTS_IDS.add(id);
   return id;
 }
+// const simulationUniqueCommentsID = Array.from({length: 100}, getUniqueCommentID);
+// console.log(simulationUniqueCommentsID);
+
 // console.log(getUniqueCommentID());
 // console.log(COMMENTS_IDS);
+//==============================================
 
 
 function getCommentMessage (count){
@@ -177,4 +192,4 @@ function getPhotoData (){
   }
   return PHOTO_DATA;
 }
-console.table(getPhotoData()); // результат всех операций
+// console.table(getPhotoData()); // результат всех операций
