@@ -1,42 +1,40 @@
-function checkStringLength(string, maxLength) {
-  return string.length <= maxLength;
-}
+// Задание 1
 
-checkStringLength('проверяемая строка', 20);
-checkStringLength('проверяемая строка', 18);
-checkStringLength('проверяемая строка', 10);
+const checkLengthString = (string = '', maxSymbols = 1) => (string.length <= maxSymbols);
+
+console.log('Вывод в консоль результата проверки задания 1:');
+console.log(checkLengthString('проверяемая строка', 20));
+console.log(checkLengthString('проверяемая строка', 18));
+console.log(checkLengthString('проверяемая строка', 10));
 
 
-function checkPalindromic (string) {
-  // const modifiedString = string.replace(/ /g, '').toLowerCase();
-  // const stringToArray = modifiedString.split('');
-  // stringToArray.reverse();
-  // const reverseString = stringToArray.join('');
-  // return modifiedString === reverseString;
+// Задание 2
 
-  // мне было непонятно, поэтому вначале написал длинный вариант
-  // вот так будет короче
-
+function checkPalindromic (string = '') {
   const modifiedString = string.replace(/ /g, '').toLowerCase();
   const reverseString = modifiedString.split('').reverse().join('');
   return modifiedString === reverseString;
 }
 
-checkPalindromic('Лёша на полке клопа нашёл');
-checkPalindromic('Лёша на пОлке   клопа н аШёл');
-checkPalindromic('Люблю пирожки с картошкой');
+console.log('Вывод в консоль результата проверки задания 2:');
+console.log(checkPalindromic('Лёша на полке клопа нашёл'));
+console.log(checkPalindromic('Лёша на пОлке   клопа н аШёл'));
+console.log(checkPalindromic('Люблю пирожки с картошкой'));
 
+
+// Задание 3
 
 function stringToNumber (value) {
   return parseInt(value.toString().replace(/[^0-9]/g, ''), 10);
 }
 
-stringToNumber(-1);
-stringToNumber(2);
-stringToNumber(1.5);
-stringToNumber('2023 год');
-stringToNumber('ECMAScript 2022');
-stringToNumber('1 кефир, 0.5 батона');
-stringToNumber('-1 кефир, 0.5 батона');
-stringToNumber('агент 007');
-stringToNumber('а я томат');
+console.log('Вывод в консоль результата проверки задания 3:');
+console.log(stringToNumber(-1));
+console.log(stringToNumber(2));
+console.log(stringToNumber(1.5));
+console.log(stringToNumber('2023 год'));
+console.log(stringToNumber('ECMAScript 2022'));
+console.log(stringToNumber('1 кефир, 0.5 батона'));
+console.log(stringToNumber('-1 кефир, 0.5 батона'));
+console.log(stringToNumber('агент 007'));
+console.log(stringToNumber('а я томат'));
