@@ -13,7 +13,7 @@ const COMMENTS_COUNT_MAX = 30;
 const COMMENT_MESSEGES_COUNT_MAX = 2; // кол-во случайных строк из которых собираются комментарии
 const COMMENTS_ID_FROM = PHOTO_ID_FROM * COMMENTS_COUNT_MIN; // идентификаторы комментариев от/до
 const COMMENTS_ID_TO = PHOTO_ID_TO * COMMENTS_COUNT_MAX;
-const PHOTO_DATA = []; // сюда записывается результат всех операций
+
 
 const USER_MESSEGES = [
   'Всё отлично!',
@@ -38,18 +38,18 @@ const USER_NAMES = [
 
 
 function getRandomNumber (from, to) {
-  const LOWER = Math.ceil(Math.min(from, to));
-  const UPPER = Math.floor(Math.max(from, to));
-  const RESULT = Math.random() * (UPPER - LOWER + 1) + LOWER;
-  return Math.floor(RESULT);
+  const lower = Math.ceil(Math.min(from, to));
+  const upper = Math.floor(Math.max(from, to));
+  const result = Math.random() * (upper - lower + 1) + lower;
+  return Math.floor(result);
 }
 
 
 function getRandomString (desiredStringLength = 1) {
-  const PRIMER = ' ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const primer = ' ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let randomString = '';
   for (let i = 0; i < desiredStringLength; i++) {
-    randomString += PRIMER.charAt(Math.floor(Math.random() * PRIMER.length));
+    randomString += primer.charAt(Math.floor(Math.random() * primer.length));
   }
   return randomString;
 }
@@ -57,12 +57,12 @@ function getRandomString (desiredStringLength = 1) {
 
 function getUniqueID(from, to) {
   let id = from;
-  const IDS = new Set();
+  const ids = new Set();
   return function (){
-    while (IDS.has(id)) {
+    while (ids.has(id)) {
       id = getRandomNumber(from, to);
     }
-    IDS.add(id);
+    ids.add(id);
     return id;
   };
 }
@@ -71,16 +71,15 @@ const getUniqueCommentID = getUniqueID(COMMENTS_ID_FROM, COMMENTS_ID_TO);
 
 
 function getCommentMessage (count){
-  const COUNT_MESEEGES = getRandomNumber(1, count);
   let message = '';
-  for (let i = 0; i < COUNT_MESEEGES; i++){
+  for (let i = 0; i < getRandomNumber(1, count); i++){
     message += (` ${ USER_MESSEGES[getRandomNumber(0, USER_MESSEGES.length - 1)]}`);
   }
-  return message;
+  return message.trim();
 }
 
 
-function getComment (){
+function getCommentObject (){
   return {
     id: getUniqueCommentID(),
     avatar: `${COMMENTS_AVATAR_PATH}avatar-${getRandomNumber(AVATAR_COUNTS_MIN, AVATAR_COUNTS_MAX)}.svg`,
@@ -90,34 +89,33 @@ function getComment (){
 }
 
 
-function getCommentsArray (){
-  const COUNT_COMMENTS = getRandomNumber(COMMENTS_COUNT_MIN, COMMENTS_COUNT_MAX);
-  const COMMENTS = [];
-  for (let i = 0; i < COUNT_COMMENTS; i++){
-    const NEW_COMMENT = getComment();
-    COMMENTS.push(NEW_COMMENT);
+function getCommentsData (){
+  const commentsData = [];
+  for (let i = 0; i < getRandomNumber(COMMENTS_COUNT_MIN, COMMENTS_COUNT_MAX); i++){
+    commentsData.push(getCommentObject());
   }
-  return COMMENTS;
+  return commentsData;
 }
 
 
-function getOnePhotoData (){
-  const PHOTO_ID = getUniquePhotoID();
+function getPhotoObject (){
+  const photoID = getUniquePhotoID();
   return {
-    id: PHOTO_ID,
-    url: `${PHOTO_PATH + PHOTO_ID}.jpg`,
+    id: photoID,
+    url: `${PHOTO_PATH + photoID}.jpg`,
     description: getRandomString(getRandomNumber(PHOTO_DESCRIPTION_MIN_LENGTH, PHOTO_DESCRIPTION_MAX_LENGTH)),
     likes: getRandomNumber(PHOTO_LIKES_MIN, PHOTO_LIKES_MAX),
-    comments: getCommentsArray()
+    comments: getCommentsData()
   };
 }
 
 
 function getPhotoData (){
+  const photoData = [];
   for (let i = 0; i < PHOTO_ID_TO; i++) {
-    const NEW_PHOTO_DATA = getOnePhotoData();
-    PHOTO_DATA.push(NEW_PHOTO_DATA);
+    photoData.push(getPhotoObject());
   }
-  return PHOTO_DATA;
+  return photoData;
 }
-console.table(getPhotoData()); // результат всех операций
+// console.table(getPhotoData()); // результат всех операций
+getPhotoData();
