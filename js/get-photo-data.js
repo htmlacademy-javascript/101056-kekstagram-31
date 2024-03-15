@@ -1,7 +1,7 @@
 import {getRandomNumber, getRandomString, getUniqueID} from './util.js';
 
 const PHOTO_ID_FROM = 1; // идентификаторы фото от/до
-const PHOTO_ID_TO = 25;
+const PHOTO_ID_TO = 26;
 const PHOTO_PATH = 'photos/'; // адрес папки с фото
 const PHOTO_LIKES_MIN = 15; // кол-во лайков
 const PHOTO_LIKES_MAX = 200;
@@ -91,4 +91,4 @@ function getPhotoData (){
   return photoData;
 }
 
-export default getPhotoData;
+export {getPhotoData};

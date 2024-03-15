@@ -15,4 +15,4 @@ function isTimeCorrect (startWork, endWork, startMeeting, meetingDuration) {
 // console.log(isTimeCorrect('14:00', '17:30', '08:0', 90));
 // console.log(isTimeCorrect('8:00', '17:30', '08:00', 900));
 
-export {isTimeCorrect};
+isTimeCorrect();
