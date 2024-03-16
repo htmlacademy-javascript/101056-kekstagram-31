@@ -1,7 +1,9 @@
 import {getPhotoData} from './get-photo-data.js';
+import {openModalBigPhoto} from './render-big-picture.js';
 
 const photoData = getPhotoData();
-const thumbnailList = document.querySelector('.pictures');
+const thumbnailContainer = document.querySelector('.pictures');
+const thumbnails = thumbnailContainer.querySelectorAll('.picture');
 const thumbnailTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
@@ -11,6 +13,7 @@ function renderThumbnailList () {
 
   photoData.forEach((element) => {
     const photoElement = thumbnailTemplate.cloneNode(true);
+    photoElement.dataset.pictureId = element.id;
     photoElement.querySelector('img').src = element.url;
     photoElement.querySelector('img').alt = element.description;
     photoElement.querySelector('.picture__likes').textContent = element.likes;
@@ -18,14 +21,21 @@ function renderThumbnailList () {
     photoListFragment.appendChild(photoElement);
   });
 
-  thumbnailList.appendChild(photoListFragment);
+  thumbnailContainer.appendChild(photoListFragment);
 }
 
 function clearThumbnailList () {
-  const elementsToDelete = thumbnailList.querySelectorAll('.picture');
-  elementsToDelete.forEach((element) => {
+  thumbnails.forEach((element) => {
     element.remove();
   });
 }
 
-export {renderThumbnailList, clearThumbnailList};
+thumbnailContainer.addEventListener('click', (evt) =>{
+  const clickedThumbnail = evt.target.closest('.picture');
+
+  if (clickedThumbnail) {
+    openModalBigPhoto(clickedThumbnail.dataset.pictureId);
+  }
+});
+
+export {renderThumbnailList, clearThumbnailList, photoData};
