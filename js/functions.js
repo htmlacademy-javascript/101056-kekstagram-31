@@ -1,40 +1,18 @@
-// Задание 1
+function isTimeCorrect (startWork, endWork, startMeeting, meetingDuration) {
+  startWork = parseInt(startWork.split(':')[0], 10) * 60 + parseInt(startWork.split(':')[1], 10);
+  endWork = parseInt(endWork.split(':')[0], 10) * 60 + parseInt(endWork.split(':')[1], 10);
+  startMeeting = parseInt(startMeeting.split(':')[0], 10) * 60 + parseInt(startMeeting.split(':')[1], 10);
 
-const checkLengthString = (string = '', maxSymbols = 1) => (string.length <= maxSymbols);
-
-console.log('Вывод в консоль результата проверки задания 1:');
-console.log(checkLengthString('проверяемая строка', 20));
-console.log(checkLengthString('проверяемая строка', 18));
-console.log(checkLengthString('проверяемая строка', 10));
-
-
-// Задание 2
-
-function checkPalindromic (string = '') {
-  const modifiedString = string.replace(/ /g, '').toLowerCase();
-  const reverseString = modifiedString.split('').reverse().join('');
-  return modifiedString === reverseString;
+  if (startMeeting < startWork || (startMeeting + meetingDuration) > endWork) {
+    return false;
+  }
+  return true;
 }
 
-console.log('Вывод в консоль результата проверки задания 2:');
-console.log(checkPalindromic('Лёша на полке клопа нашёл'));
-console.log(checkPalindromic('Лёша на пОлке   клопа н аШёл'));
-console.log(checkPalindromic('Люблю пирожки с картошкой'));
+// console.log(isTimeCorrect('08:00', '17:30', '16:00', 90));
+// console.log(isTimeCorrect('8:0', '10:0', '8:0', 120));
+// console.log(isTimeCorrect('08:00', '14:30', '14:00', 90));
+// console.log(isTimeCorrect('14:00', '17:30', '08:0', 90));
+// console.log(isTimeCorrect('8:00', '17:30', '08:00', 900));
 
-
-// Задание 3
-
-function stringToNumber (value) {
-  return parseInt(value.toString().replace(/[^0-9]/g, ''), 10);
-}
-
-console.log('Вывод в консоль результата проверки задания 3:');
-console.log(stringToNumber(-1));
-console.log(stringToNumber(2));
-console.log(stringToNumber(1.5));
-console.log(stringToNumber('2023 год'));
-console.log(stringToNumber('ECMAScript 2022'));
-console.log(stringToNumber('1 кефир, 0.5 батона'));
-console.log(stringToNumber('-1 кефир, 0.5 батона'));
-console.log(stringToNumber('агент 007'));
-console.log(stringToNumber('а я томат'));
+isTimeCorrect();
