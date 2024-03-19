@@ -5,7 +5,6 @@ const bigPictureSocial = document.querySelector('.big-picture__social');
 const socialComments = bigPictureSocial.querySelector('.social__comments');
 const commentsTemplate = socialComments.querySelector('.social__comment');
 const commentsLoader = bigPictureSocial.querySelector('.comments-loader');
-const socialCommentTotalCount = bigPictureSocial.querySelector('.social__comment-total-count');
 
 const commentsFragment = document.createDocumentFragment();
 
@@ -38,7 +37,6 @@ function createCommentsFragment (index){
   commentsElement.querySelector('img').src = comments[index].avatar;
   commentsElement.querySelector('img').alt = comments[index].name;
   commentsElement.querySelector('.social__text').textContent = comments[index].message;
-  commentsElement.dataset.commentId = comments[index].id;
   commentsFragment.appendChild(commentsElement);
 }
 
@@ -49,7 +47,7 @@ function renderSocialCommentShownCount () {
 }
 
 function renderCommentsLoader () {
-  const commentsTotal = socialCommentTotalCount.textContent;
+  const commentsTotal = comments.length;
   const commentsShown = socialComments.children.length;
   commentsLoader.classList.remove('hidden');
 
