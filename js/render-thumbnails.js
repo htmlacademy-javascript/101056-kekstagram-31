@@ -34,8 +34,9 @@ thumbnailContainer.addEventListener('click', (evt) =>{
   const clickedThumbnail = evt.target.closest('.picture');
 
   if (clickedThumbnail) {
-    openModalBigPhoto(clickedThumbnail.dataset.pictureId);
+    evt.preventDefault();
+    openModalBigPhoto(clickedThumbnail.dataset.pictureId, photoData);
   }
 });
 
-export {renderThumbnailList, clearThumbnailList, photoData};
+export {renderThumbnailList, clearThumbnailList};

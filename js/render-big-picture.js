@@ -1,4 +1,3 @@
-import {photoData} from './render-thumbnails.js';
 import {isEscapeKey} from './util.js';
 import {renderFirstsComments, renderMoreComments} from './render-comments.js';
 
@@ -10,20 +9,8 @@ const socialComments = modalBigPhoto.querySelector('.social__comments');
 const commentsLoader = bigPictureSocial.querySelector('.comments-loader');
 
 
-function findPhotoObject(pictureId) {
+function findPhotoObject(pictureId, photoData) {
   return photoData.find((item) => item.id === parseInt(pictureId, 10));
-}
-
-function changeBigPhoto (pictureId) {
-  const photoObject = findPhotoObject(pictureId);
-
-  bigPhoto.querySelector('img').src = photoObject.url;
-  bigPhoto.querySelector('img').alt = photoObject.description;
-  bigPictureSocial.querySelector('.likes-count').textContent = photoObject.likes;
-  bigPictureSocial.querySelector('.social__comment-total-count').textContent = photoObject.comments.length;
-  bigPictureSocial.querySelector('.social__caption').textContent = photoObject.description;
-
-  renderFirstsComments();
 }
 
 function onModalBigPhotoEsc (evt) {
@@ -39,7 +26,7 @@ function onModalBigPhotoClickElsewhere (evt) {
   }
 }
 
-function openModalBigPhoto (pictureId) {
+function openModalBigPhoto (pictureId, photoData) {
   modalBigPhoto.classList.remove('hidden');
   document.body.classList.add('modal-open');
   bigPhoto.dataset.pictureId = pictureId;
@@ -48,7 +35,15 @@ function openModalBigPhoto (pictureId) {
   modalBigPhoto.addEventListener('click', onModalBigPhotoClickElsewhere);
   commentsLoader.addEventListener('click', renderMoreComments);
 
-  changeBigPhoto(pictureId);
+  const photoObject = findPhotoObject(pictureId, photoData);
+
+  bigPhoto.querySelector('img').src = photoObject.url;
+  bigPhoto.querySelector('img').alt = photoObject.description;
+  bigPictureSocial.querySelector('.likes-count').textContent = photoObject.likes;
+  bigPictureSocial.querySelector('.social__comment-total-count').textContent = photoObject.comments.length;
+  bigPictureSocial.querySelector('.social__caption').textContent = photoObject.description;
+
+  renderFirstsComments(photoObject.comments);
 }
 
 function closeModalBigPhoto () {
@@ -65,4 +60,4 @@ bigPictureCancel.addEventListener('click', () =>{
   closeModalBigPhoto();
 });
 
-export {openModalBigPhoto, closeModalBigPhoto, findPhotoObject};
+export {openModalBigPhoto, closeModalBigPhoto};

@@ -1,28 +1,21 @@
-import {findPhotoObject} from './render-big-picture.js';
-
 const COMMENTS_COUNT = 5; // сколько комментариев за раз показывается под фото
+let comments = [];
 
-const socialComments = document.querySelector('.social__comments');
-const commentsTemplate = socialComments.querySelector('.social__comment');
-const commentsLoader = document.querySelector('.comments-loader');
-const bigPhoto = document.querySelector('.big-picture__img');
 const bigPictureSocial = document.querySelector('.big-picture__social');
+const socialComments = bigPictureSocial.querySelector('.social__comments');
+const commentsTemplate = socialComments.querySelector('.social__comment');
+const commentsLoader = bigPictureSocial.querySelector('.comments-loader');
 const socialCommentTotalCount = bigPictureSocial.querySelector('.social__comment-total-count');
 
 const commentsFragment = document.createDocumentFragment();
 
-function findComments () {
-  const pictureId = bigPhoto.dataset.pictureId;
-  const photoData = findPhotoObject(pictureId);
-  return photoData.comments;
-}
 
-function renderFirstsComments() {
+function renderFirstsComments(commentsArray) {
   socialComments.innerHTML = '';
-  const comments = findComments();
+  comments = commentsArray;
 
   for (let i = 0; i < COMMENTS_COUNT && i < comments.length; i++) {
-    createCommentsFragment(i, comments);
+    createCommentsFragment(i);
   }
   socialComments.appendChild(commentsFragment);
   renderSocialCommentShownCount();
@@ -31,17 +24,16 @@ function renderFirstsComments() {
 
 function renderMoreComments () {
   const lastIndex = socialComments.children.length;
-  const comments = findComments();
 
   for (let i = lastIndex; i < lastIndex + COMMENTS_COUNT && i < comments.length; i++) {
-    createCommentsFragment(i, comments);
+    createCommentsFragment(i);
   }
   socialComments.appendChild(commentsFragment);
   renderSocialCommentShownCount();
   renderCommentsLoader();
 }
 
-function createCommentsFragment (index, comments){
+function createCommentsFragment (index){
   const commentsElement = commentsTemplate.cloneNode(true);
   commentsElement.querySelector('img').src = comments[index].avatar;
   commentsElement.querySelector('img').alt = comments[index].name;
