@@ -3,7 +3,8 @@ import {openModalBigPhoto, closeModalBigPhoto} from './render-big-picture.js';
 import {getPhotoData} from './get-photo-data.js';
 
 const thumbnailContainer = document.querySelector('.pictures');
-const bigPictureCancel = thumbnailContainer.querySelector('.big-picture__cancel');
+const modalBigPicture = document.querySelector('.big-picture');
+const bigPictureCancel = modalBigPicture.querySelector('.big-picture__cancel');
 
 const photoData = getPhotoData();
 renderThumbnailList(photoData);
