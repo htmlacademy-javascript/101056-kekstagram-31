@@ -1,5 +1,6 @@
 import {hasDuplicates} from './util.js';
 
+const PATTERN = /^[#a-zа-яё0-9]+$/;
 let errorText = '';
 
 function validateHashtags(value) {
@@ -8,7 +9,6 @@ function validateHashtags(value) {
   }
   const hashtagsString = value.trim().toLowerCase();
   const hashtags = hashtagsString.split(/\s+/).filter(Boolean);
-  const pattern = /^[#a-zа-яё0-9]+$/;
 
   if (hashtags.length > 5) {
     errorText = 'Нельзя указать больше пяти хэштегов';
@@ -24,7 +24,7 @@ function validateHashtags(value) {
       errorText = 'Хэштег начинается с символа # ';
       return false;
     }
-    if (!pattern.test(hashtags[i])) {
+    if (!PATTERN.test(hashtags[i])) {
       errorText = 'Хэштег должен состоять из букв и чисел';
       return false;
     }

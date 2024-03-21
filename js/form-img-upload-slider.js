@@ -1,9 +1,8 @@
 const formImgUploadWrapper = document.querySelector('.img-upload__wrapper');
-const formEffectLevelSlider = formImgUploadWrapper.querySelector('.effect-level__slider');
-const formEffectLevelValue = formImgUploadWrapper.querySelector('.effect-level__value');
+const levelSlider = formImgUploadWrapper.querySelector('.effect-level__slider');
+const levelValue = formImgUploadWrapper.querySelector('.effect-level__value');
 
-
-noUiSlider.create (formEffectLevelSlider, {
+noUiSlider.create (levelSlider, {
   range: {
     min: 0,
     max: 100,
@@ -13,7 +12,7 @@ noUiSlider.create (formEffectLevelSlider, {
   connect: 'lower',
 });
 
-formEffectLevelSlider.noUiSlider.on('update', () => {
-  formEffectLevelValue.value = formEffectLevelSlider.noUiSlider.get();
+levelSlider.noUiSlider.on('update', () => {
+  levelValue.value = levelSlider.noUiSlider.get();
 });
 
