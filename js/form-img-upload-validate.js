@@ -1,4 +1,4 @@
-import {removeTrailingSpaces, hasDuplicates} from './util.js';
+import {hasDuplicates} from './util.js';
 
 let errorText = '';
 
@@ -6,9 +6,9 @@ function validateHashtags(value) {
   if (value === '') {
     return true;
   }
-  const hashtagsString = removeTrailingSpaces(value.toLowerCase());
-  const hashtags = hashtagsString.split(' ');
-  const pattern = /^[#a-zA-Z0-9]+$/;
+  const hashtagsString = value.trim().toLowerCase();
+  const hashtags = hashtagsString.split(/\s+/).filter(Boolean);
+  const pattern = /^[#a-zа-яё0-9]+$/;
 
   if (hashtags.length > 5) {
     errorText = 'Нельзя указать больше пяти хэштегов';

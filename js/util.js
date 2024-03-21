@@ -43,16 +43,8 @@ function isEnterKey (evt) {
   return evt.keyCode === 13;
 }
 
-function removeTrailingSpaces(str) {
-  let i = str.length - 1;
-  while (str[i] === ' ' && i >= 0) {
-    i--;
-  }
-  return str.slice(0, i + 1);
-}
-
 function hasDuplicates(array) {
   return new Set(array).size !== array.length;
 }
 
-export {getRandomNumber, getRandomString, getUniqueID, isEscapeKey, isEnterKey, removeTrailingSpaces, hasDuplicates};
+export {getRandomNumber, getRandomString, getUniqueID, isEscapeKey, isEnterKey, hasDuplicates};
