@@ -2,10 +2,8 @@ import {isEscapeKey} from './util.js';
 import {renderFirstsComments, renderMoreComments} from './render-comments.js';
 
 const modalBigPhoto = document.querySelector('.big-picture');
-const bigPictureCancel = modalBigPhoto.querySelector('.big-picture__cancel');
 const bigPhoto = modalBigPhoto.querySelector('.big-picture__img');
 const bigPictureSocial = modalBigPhoto.querySelector('.big-picture__social');
-const socialComments = modalBigPhoto.querySelector('.social__comments');
 const commentsLoader = bigPictureSocial.querySelector('.comments-loader');
 
 
@@ -13,27 +11,30 @@ function findPhotoObject(pictureId, photoData) {
   return photoData.find((item) => item.id === parseInt(pictureId, 10));
 }
 
-function onModalBigPhotoEsc (evt) {
+function onModalKeydownEsc (evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeModalBigPhoto();
   }
 }
 
-function onModalBigPhotoClickElsewhere (evt) {
+function onModalClickElsewhere (evt) {
   if (!evt.target.closest('.big-picture__preview')) {
     closeModalBigPhoto();
   }
 }
 
+function onModalClickLoadMore () {
+  renderMoreComments();
+}
+
 function openModalBigPhoto (pictureId, photoData) {
   modalBigPhoto.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  bigPhoto.dataset.pictureId = pictureId;
 
-  document.addEventListener('keydown', onModalBigPhotoEsc);
-  modalBigPhoto.addEventListener('click', onModalBigPhotoClickElsewhere);
-  commentsLoader.addEventListener('click', renderMoreComments);
+  document.addEventListener('keydown', onModalKeydownEsc);
+  modalBigPhoto.addEventListener('click', onModalClickElsewhere);
+  commentsLoader.addEventListener('click', onModalClickLoadMore);
 
   const photoObject = findPhotoObject(pictureId, photoData);
 
@@ -50,14 +51,10 @@ function closeModalBigPhoto () {
   modalBigPhoto.classList.add('hidden');
   document.body.classList.remove('modal-open');
 
-  document.removeEventListener('keydown', onModalBigPhotoEsc);
-  modalBigPhoto.removeEventListener('click', onModalBigPhotoClickElsewhere);
-  commentsLoader.removeEventListener('click', renderMoreComments);
-  socialComments.innerHTML = '';
+  document.removeEventListener('keydown', onModalKeydownEsc);
+  modalBigPhoto.removeEventListener('click', onModalClickElsewhere);
+  commentsLoader.removeEventListener('click', onModalClickLoadMore);
 }
 
-bigPictureCancel.addEventListener('click', () =>{
-  closeModalBigPhoto();
-});
 
 export {openModalBigPhoto, closeModalBigPhoto};

@@ -1,14 +1,10 @@
-import {getPhotoData} from './get-photo-data.js';
-import {openModalBigPhoto} from './render-big-picture.js';
-
-const photoData = getPhotoData();
 const thumbnailContainer = document.querySelector('.pictures');
 const thumbnails = thumbnailContainer.querySelectorAll('.picture');
 const thumbnailTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
-function renderThumbnailList () {
+function renderThumbnailList (photoData) {
   const photoListFragment = document.createDocumentFragment();
 
   photoData.forEach((element) => {
@@ -29,14 +25,5 @@ function clearThumbnailList () {
     element.remove();
   });
 }
-
-thumbnailContainer.addEventListener('click', (evt) =>{
-  const clickedThumbnail = evt.target.closest('.picture');
-
-  if (clickedThumbnail) {
-    evt.preventDefault();
-    openModalBigPhoto(clickedThumbnail.dataset.pictureId, photoData);
-  }
-});
 
 export {renderThumbnailList, clearThumbnailList};

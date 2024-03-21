@@ -35,7 +35,6 @@ function getUniqueID(from, to) {
   };
 }
 
-
 function isEscapeKey (evt) {
   return evt.keyCode === 27;
 }
@@ -44,5 +43,8 @@ function isEnterKey (evt) {
   return evt.keyCode === 13;
 }
 
+function hasDuplicates(array) {
+  return new Set(array).size !== array.length;
+}
 
-export {getRandomNumber, getRandomString, getUniqueID, isEscapeKey, isEnterKey};
+export {getRandomNumber, getRandomString, getUniqueID, isEscapeKey, isEnterKey, hasDuplicates};
