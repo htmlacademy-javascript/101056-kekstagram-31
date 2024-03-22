@@ -1,6 +1,7 @@
 import {isEscapeKey} from './util.js';
 import {validateHashtags, getErrorText} from './form-img-upload-validate.js';
 import {onFormClickScaleButtons} from './form-img-upload-scale.js';
+import {onFormClickFilter, filterReset} from './form-img-upload-slider.js';
 
 const form = document.querySelector('.img-upload__form');
 const formImgUploadInput = form.querySelector('.img-upload__input');
@@ -16,6 +17,8 @@ const formTextDescription = formImgUploadOverlay.querySelector('.text__descripti
 
 const formImgUploadScale = formImgUploadWrapper.querySelector('.img-upload__scale');
 const formScaleControlValue = formImgUploadScale.querySelector('.scale__control--value');
+
+const imgUploadEffects = formImgUploadWrapper.querySelector('.img-upload__effects');
 
 
 function onFormEsc (evt) {
@@ -52,6 +55,7 @@ function openForm () {
   formImgUploadCancel.addEventListener('click', onFormClickCancel);
   document.addEventListener('keydown', onFormEsc);
   formImgUploadScale.addEventListener('click', onFormClickScaleButtons);
+  imgUploadEffects.addEventListener('change', onFormClickFilter);
 
   const file = formImgUploadInput.files[0];
   const imageURL = URL.createObjectURL(file);
@@ -64,8 +68,10 @@ function closeForm () {
   formImgUploadCancel.removeEventListener('click', onFormClickCancel);
   document.removeEventListener('keydown', onFormEsc);
   formImgUploadScale.removeEventListener('click', onFormClickScaleButtons);
+  imgUploadEffects.removeEventListener('change', onFormClickFilter);
 
   resetForm();
+  filterReset();
 }
 
 const pristine = new Pristine (form, {
