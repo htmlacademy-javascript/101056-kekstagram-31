@@ -1,6 +1,7 @@
 import {hasDuplicates} from './util.js';
 
 const PATTERN = /^[#a-zа-яё0-9]+$/;
+const HASHTAGS_MAX = 5;
 let errorText = '';
 
 function validateHashtags(value) {
@@ -10,7 +11,7 @@ function validateHashtags(value) {
   const hashtagsString = value.trim().toLowerCase();
   const hashtags = hashtagsString.split(/\s+/).filter(Boolean);
 
-  if (hashtags.length > 5) {
+  if (hashtags.length > HASHTAGS_MAX) {
     errorText = 'Нельзя указать больше пяти хэштегов';
     return false;
   }

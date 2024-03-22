@@ -10,6 +10,7 @@ const filtersData = {
 let currentFilter;
 
 const formImgUploadWrapper = document.querySelector('.img-upload__wrapper');
+const slider = formImgUploadWrapper.querySelector('.img-upload__effect-level');
 const levelSlider = formImgUploadWrapper.querySelector('.effect-level__slider');
 const levelValue = formImgUploadWrapper.querySelector('.effect-level__value');
 const imgUploadPreview = formImgUploadWrapper.querySelector('.img-upload__preview');
@@ -54,7 +55,7 @@ levelSlider.noUiSlider.on('update', () => {
 
 levelSlider.setAttribute('disabled', true);
 
-function filterReset() {
+function resetFilter () {
   levelSlider.removeAttribute('disabled');
   noneRadioButton.checked = true;
   levelSlider.noUiSlider.set(0);
@@ -62,7 +63,7 @@ function filterReset() {
 }
 
 function onFormClickFilter (evt) {
-
+  slider.classList.remove('hidden');
   const clickedElementId = evt.target.id.split('-')[1];
   if (clickedElementId !== 'none') {
     levelSlider.removeAttribute('disabled');
@@ -76,8 +77,9 @@ function onFormClickFilter (evt) {
       step: filtersData[clickedElementId].step
     });
   } else {
-    filterReset();
+    slider.classList.add('hidden');
+    resetFilter();
   }
 }
 
-export {onFormClickFilter, filterReset};
+export {onFormClickFilter, resetFilter};

@@ -1,6 +1,6 @@
 const imgUploadScale = document.querySelector('.img-upload__scale');
 const controlValue = imgUploadScale.querySelector('.scale__control--value');
-const imgUploadPreview = document.querySelector('.img-upload__preview');
+const imgUploadPreview = document.querySelector('.img-upload__preview img');
 
 const STEP = 25;
 let multiplier;
