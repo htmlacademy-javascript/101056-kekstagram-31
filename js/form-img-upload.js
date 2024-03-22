@@ -1,6 +1,6 @@
 import {isEscapeKey} from './util.js';
 import {validateHashtags, getErrorText} from './form-img-upload-validate.js';
-import {onFormClickScaleButtons} from './form-img-upload-scale.js';
+import {onFormClickScaleButtons, updateImageScale} from './form-img-upload-scale.js';
 import {onFormClickFilter, filterReset} from './form-img-upload-slider.js';
 
 const form = document.querySelector('.img-upload__form');
@@ -50,6 +50,7 @@ function resetForm () {
 }
 
 function openForm () {
+  formImgUploadPreview.dataset.imageScale = formScaleControlValue.value;
   formImgUploadOverlay.classList.remove('hidden');
 
   formImgUploadCancel.addEventListener('click', onFormClickCancel);
@@ -72,6 +73,7 @@ function closeForm () {
 
   resetForm();
   filterReset();
+  updateImageScale(100);
 }
 
 const pristine = new Pristine (form, {

@@ -25,8 +25,9 @@ function onFormClickScaleButtons(evt) {
 
   if (value >= 25 && value <= 100) {
     controlValue.value = `${value}%`;
+    imgUploadPreview.dataset.imageScale = `${value}%`;
     updateImageScale(value);
   }
 }
 
-export {onFormClickScaleButtons};
+export {onFormClickScaleButtons, updateImageScale};
