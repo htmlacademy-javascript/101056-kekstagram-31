@@ -47,10 +47,12 @@ function resetForm () {
   formTextHashtags.value = null;
   formTextDescription.value = null;
   formScaleControlValue.value = '100%';
+
+  filterReset();
+  updateImageScale(100);
 }
 
 function openForm () {
-  formImgUploadPreview.dataset.imageScale = formScaleControlValue.value;
   formImgUploadOverlay.classList.remove('hidden');
 
   formImgUploadCancel.addEventListener('click', onFormClickCancel);
@@ -72,8 +74,6 @@ function closeForm () {
   imgUploadEffects.removeEventListener('change', onFormClickFilter);
 
   resetForm();
-  filterReset();
-  updateImageScale(100);
 }
 
 const pristine = new Pristine (form, {

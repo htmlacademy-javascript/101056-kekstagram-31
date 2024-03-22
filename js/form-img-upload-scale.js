@@ -3,7 +3,7 @@ const controlValue = imgUploadScale.querySelector('.scale__control--value');
 const imgUploadPreview = document.querySelector('.img-upload__preview');
 
 const STEP = 25;
-let multiplier = '';
+let multiplier;
 
 function updateImageScale(value) {
   const scaleValue = parseFloat(value) / 100;
@@ -25,7 +25,6 @@ function onFormClickScaleButtons(evt) {
 
   if (value >= 25 && value <= 100) {
     controlValue.value = `${value}%`;
-    imgUploadPreview.dataset.imageScale = `${value}%`;
     updateImageScale(value);
   }
 }
