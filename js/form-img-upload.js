@@ -1,5 +1,5 @@
 import {isEscapeKey} from './util.js';
-import {validateHashtags, getErrorText} from './form-img-upload-validate.js';
+import {validateHashtags, getErrorText, validateDescription} from './form-img-upload-validate.js';
 import {onFormClickScaleButtons, updateImageScale} from './form-img-upload-scale.js';
 import {onFormClickFilter, resetFilter} from './form-img-upload-slider.js';
 
@@ -86,7 +86,7 @@ const pristine = new Pristine (form, {
 
 
 pristine.addValidator(form.querySelector('.text__hashtags'), validateHashtags, getErrorText);
-// валидатор на 140 символов
+pristine.addValidator(form.querySelector('.text__description'), validateDescription, getErrorText);
 
 form.addEventListener('submit', (evt) => {
   const isValid = pristine.validate();

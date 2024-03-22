@@ -12,11 +12,11 @@ function validateHashtags(value) {
   const hashtags = hashtagsString.split(/\s+/).filter(Boolean);
 
   if (hashtags.length > HASHTAGS_MAX) {
-    errorText = 'Нельзя указать больше пяти хэштегов';
+    errorText = `Нельзя указать больше ${ HASHTAGS_MAX } хэштегов`;
     return false;
   }
   if (hasDuplicates(hashtags)) {
-    errorText = 'Хэштеги не должны повторятся';
+    errorText = 'Хэштеги не должны повторяться';
     return false;
   }
 
@@ -41,8 +41,16 @@ function validateHashtags(value) {
   return true;
 }
 
+function validateDescription (value) {
+  if (value.length > 140) {
+    errorText = 'Длина комментария не более 140 символов';
+    return false;
+  }
+  return true;
+}
+
 function getErrorText () {
   return errorText;
 }
 
-export {validateHashtags, getErrorText};
+export {validateHashtags, getErrorText, validateDescription};
