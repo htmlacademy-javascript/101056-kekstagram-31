@@ -11,13 +11,7 @@ const formImgUploadWrapper = formImgUploadOverlay.querySelector('.img-upload__wr
 const formImgPreviewContainer = formImgUploadWrapper.querySelector('.img-upload__preview-container');
 const formImgUploadPreview = formImgPreviewContainer.querySelector('.img-upload__preview');
 const formImgUploadCancel = formImgUploadOverlay.querySelector('.img-upload__cancel');
-
-const formTextHashtags = formImgUploadOverlay.querySelector('.text__hashtags');
-const formTextDescription = formImgUploadOverlay.querySelector('.text__description');
-
 const formImgUploadScale = formImgUploadWrapper.querySelector('.img-upload__scale');
-const formScaleControlValue = formImgUploadScale.querySelector('.scale__control--value');
-
 const imgUploadEffects = formImgUploadWrapper.querySelector('.img-upload__effects');
 const slider = formImgUploadWrapper.querySelector('.img-upload__effect-level');
 
@@ -44,11 +38,7 @@ formImgUploadInput.addEventListener ('change', (evt) =>{
 });
 
 function resetForm () {
-  formImgUploadInput.value = null;
-  formTextHashtags.value = null;
-  formTextDescription.value = null;
-  formScaleControlValue.value = '100%';
-
+  form.reset();
   resetFilter();
   updateImageScale(100);
 }
