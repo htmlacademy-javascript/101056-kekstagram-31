@@ -16,8 +16,8 @@ const levelValue = formImgUploadWrapper.querySelector('.effect-level__value');
 const imgUploadPreview = formImgUploadWrapper.querySelector('.img-upload__preview');
 const noneRadioButton = formImgUploadWrapper.querySelector('#effect-none');
 
-function changeFilter (filter, value) {
-  switch (filter) {
+function changeFilter (value) {
+  switch (currentFilter) {
     case 'none' : imgUploadPreview.style.filter = ''; break;
     case 'chrome' : imgUploadPreview.style.filter = `grayscale(${value})`; break;
     case 'sepia' : imgUploadPreview.style.filter = `sepia(${value})`; break;
@@ -50,13 +50,12 @@ noUiSlider.create (levelSlider, {
 
 levelSlider.noUiSlider.on('update', () => {
   levelValue.value = levelSlider.noUiSlider.get();
-  changeFilter(currentFilter, levelValue.value);
+  changeFilter(levelValue.value);
 });
 
 levelSlider.setAttribute('disabled', true);
 
 function resetFilter () {
-  levelSlider.removeAttribute('disabled');
   noneRadioButton.checked = true;
   levelSlider.noUiSlider.set(0);
   levelSlider.setAttribute('disabled', true);
