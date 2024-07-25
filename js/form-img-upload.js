@@ -1,5 +1,4 @@
 import {isEscapeKey} from './util.js';
-import {validateHashtags, getErrorText, validateDescription} from './form-img-upload-validate.js';
 import {onFormClickScaleButtons, updateImageScale} from './form-img-upload-scale.js';
 import {onFormClickFilter, resetFilter} from './form-img-upload-slider.js';
 
@@ -32,16 +31,16 @@ function onFormClickCancel (evt) {
   closeForm();
 }
 
-formImgUploadInput.addEventListener ('change', (evt) =>{
-  evt.preventDefault();
-  openForm();
-});
-
 function resetForm () {
   form.reset();
   resetFilter();
   updateImageScale(100);
 }
+
+formImgUploadInput.addEventListener ('change', (evt) =>{
+  evt.preventDefault();
+  openForm();
+});
 
 function openForm () {
   formImgUploadOverlay.classList.remove('hidden');
@@ -68,19 +67,4 @@ function closeForm () {
   resetForm();
 }
 
-const pristine = new Pristine (form, {
-  classTo: 'img-upload__field-wrapper',
-  errorClass: 'img-upload__field-wrapper--error',
-  errorTextParent: 'img-upload__field-wrapper',
-});
-
-
-pristine.addValidator(form.querySelector('.text__hashtags'), validateHashtags, getErrorText);
-pristine.addValidator(form.querySelector('.text__description'), validateDescription, getErrorText);
-
-form.addEventListener('submit', (evt) => {
-  const isValid = pristine.validate();
-  if (!isValid) {
-    evt.preventDefault();
-  }
-});
+export {closeForm};
