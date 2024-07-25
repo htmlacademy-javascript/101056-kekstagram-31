@@ -33,6 +33,7 @@ function onFormClickCancel (evt) {
 
 function resetForm () {
   form.reset();
+  formImgUploadPreview.querySelector('img').src = 'img/upload-default-image.jpg';
   resetFilter();
   updateImageScale(100);
 }
@@ -56,15 +57,18 @@ function openForm () {
   formImgUploadPreview.querySelector('img').src = imageURL;
 }
 
-function closeForm () {
-  formImgUploadOverlay.classList.add('hidden');
+function closeForm (isError) {
+  if (!isError){
 
-  formImgUploadCancel.removeEventListener('click', onFormClickCancel);
-  document.removeEventListener('keydown', onFormEsc);
-  formImgUploadScale.removeEventListener('click', onFormClickScaleButtons);
-  imgUploadEffects.removeEventListener('change', onFormClickFilter);
+    formImgUploadOverlay.classList.add('hidden');
 
-  resetForm();
+    formImgUploadCancel.removeEventListener('click', onFormClickCancel);
+    document.removeEventListener('keydown', onFormEsc);
+    formImgUploadScale.removeEventListener('click', onFormClickScaleButtons);
+    imgUploadEffects.removeEventListener('change', onFormClickFilter);
+
+    resetForm();
+  }
 }
 
 export {closeForm};
