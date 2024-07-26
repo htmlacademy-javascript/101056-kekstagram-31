@@ -14,7 +14,7 @@ function getData(onSuccess, onFail){
 
 function sendData(formData){
   return fetch(
-    'https://32.javascript.htmlacademy.pro/kekstagram',
+    'https://32.javascript.htmlacademy.pro/kekstagra',
     {
       method: 'POST',
       body: formData,

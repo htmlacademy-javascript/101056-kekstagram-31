@@ -58,10 +58,9 @@ function openForm () {
 }
 
 function closeForm (isError) {
+  formImgUploadOverlay.classList.add('hidden');
+
   if (!isError){
-
-    formImgUploadOverlay.classList.add('hidden');
-
     formImgUploadCancel.removeEventListener('click', onFormClickCancel);
     document.removeEventListener('keydown', onFormEsc);
     formImgUploadScale.removeEventListener('click', onFormClickScaleButtons);

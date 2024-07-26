@@ -3,6 +3,7 @@ import {isEscapeKey} from './util.js';
 import {sendData} from './api.js';
 
 const form = document.querySelector('.img-upload__form');
+const formImgUploadOverlay = form.querySelector('.img-upload__overlay');
 const templateSuccess = document.querySelector('#success');
 const templateError = document.querySelector('#error');
 const submitButton = form.querySelector('.img-upload__submit');
@@ -69,6 +70,7 @@ function closeNotification() {
   if (notificationCancel) {
     notificationCancel.removeEventListener('click', onNotificationClickCancel);
     notificationElement.removeEventListener('click', onNotificationClickElsewhere);
+    formImgUploadOverlay.classList.remove('hidden');
   }
   document.removeEventListener('keydown', onNotificationEsc);
   if (notificationElement) {

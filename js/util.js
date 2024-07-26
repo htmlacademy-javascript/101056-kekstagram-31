@@ -48,3 +48,4 @@ function hasDuplicates(array) {
 }
 
 export {getRandomNumber, getRandomString, getUniqueID, isEscapeKey, isEnterKey, hasDuplicates};
+// export {hasDuplicates, isEscapeKey};
