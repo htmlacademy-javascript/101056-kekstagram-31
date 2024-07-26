@@ -67,10 +67,12 @@ function showNotification(isError) {
 }
 
 function closeNotification() {
+  if (isResponseError){
+    formImgUploadOverlay.classList.remove('hidden');
+  }
   if (notificationCancel) {
     notificationCancel.removeEventListener('click', onNotificationClickCancel);
     notificationElement.removeEventListener('click', onNotificationClickElsewhere);
-    formImgUploadOverlay.classList.remove('hidden');
   }
   document.removeEventListener('keydown', onNotificationEsc);
   if (notificationElement) {
