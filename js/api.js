@@ -12,8 +12,14 @@ function getData(onSuccess, onFail){
 }
 
 
-// function sendData(onSuccess, onFail, body){
+function sendData(formData){
+  return fetch(
+    'https://32.javascript.htmlacademy.pro/kekstagram',
+    {
+      method: 'POST',
+      body: formData,
+    },
+  );
+}
 
-// }
-
-export {getData};
+export {getData, sendData};

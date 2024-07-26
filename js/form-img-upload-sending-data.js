@@ -1,5 +1,6 @@
 import {validateHashtags, getErrorText, validateDescription} from './form-img-upload-validate.js';
 import {isEscapeKey} from './util.js';
+import {sendData} from './api.js';
 
 const form = document.querySelector('.img-upload__form');
 const templateSuccess = document.querySelector('#success');
@@ -7,7 +8,7 @@ const templateError = document.querySelector('#error');
 
 let notificationElement;
 let notificationCancel;
-let isResponseOk;
+let isResponseError;
 
 const pristine = new Pristine (form, {
   classTo: 'img-upload__field-wrapper',
@@ -29,9 +30,9 @@ function onNotificationClickCancel (evt) {
   closeNotification();
 }
 function onNotificationClickElsewhere(evt) {
-  if (!evt.target.closest('.error__inner') && isResponseOk === true) {
+  if (!evt.target.closest('.error__inner') && isResponseError === true) {
     closeNotification();
-  } else if (!evt.target.closest('.success__inner') && isResponseOk === false){
+  } else if (!evt.target.closest('.success__inner') && isResponseError === false){
     closeNotification();
   }
 }
@@ -75,24 +76,19 @@ function closeNotification() {
   }
 }
 
-function setUserFormSubmit(onSuccess){
+function setUserFormSubmit(onSuccess) {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const isValid = pristine.validate();
     if (isValid) {
       const formData = new FormData(evt.target);
 
-      fetch(
-        'https://32.javascript.htmlacademy.pro/kekstagram',
-        {
-          method: 'POST',
-          body: formData,
-        },
-      ).then((response) => {
-        isResponseOk = !response.ok;
-        showNotification(!response.ok);
-        onSuccess(!response.ok);
-      });
+      sendData(formData)
+        .then((response) => {
+          isResponseError = !response.ok;
+          showNotification(isResponseError);
+          onSuccess(isResponseError);
+        });
     }
   });
 }
