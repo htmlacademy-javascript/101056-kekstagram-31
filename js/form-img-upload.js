@@ -43,18 +43,44 @@ formImgUploadInput.addEventListener ('change', (evt) =>{
   openForm();
 });
 
+function showError() {
+  const existingError = document.querySelector('.data-error');
+  if (existingError) {
+    existingError.remove();
+  }
+
+  const errorTemplate = document.getElementById('data-error');
+  const clone = document.importNode(errorTemplate.content, true);
+  const errorElement = document.createElement('div');
+  errorElement.appendChild(clone);
+  document.body.appendChild(errorElement);
+  const errorText = document.body.querySelector('.data-error__title');
+  errorText.textContent = 'Не верный формат файла';
+
+  setTimeout(() => {
+    errorElement.remove();
+  }, 5000);
+}
+
 function openForm () {
-  formImgUploadOverlay.classList.remove('hidden');
-  slider.classList.add('hidden');
-
-  formImgUploadCancel.addEventListener('click', onFormClickCancel);
-  document.addEventListener('keydown', onFormEsc);
-  formImgUploadScale.addEventListener('click', onFormClickScaleButtons);
-  imgUploadEffects.addEventListener('change', onFormClickFilter);
-
   const file = formImgUploadInput.files[0];
-  const imageURL = URL.createObjectURL(file);
-  formImgUploadPreview.querySelector('img').src = imageURL;
+  const fileName = file.name;
+
+  if ((fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png'))){
+    const imageURL = URL.createObjectURL(file);
+    formImgUploadPreview.querySelector('img').src = imageURL;
+
+    formImgUploadOverlay.classList.remove('hidden');
+    slider.classList.add('hidden');
+
+    formImgUploadCancel.addEventListener('click', onFormClickCancel);
+    document.addEventListener('keydown', onFormEsc);
+    formImgUploadScale.addEventListener('click', onFormClickScaleButtons);
+    imgUploadEffects.addEventListener('change', onFormClickFilter);
+  } else {
+    showError();
+    formImgUploadInput.value = '';
+  }
 }
 
 function closeForm (isError) {
