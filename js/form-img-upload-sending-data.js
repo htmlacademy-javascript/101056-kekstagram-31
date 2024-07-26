@@ -5,6 +5,7 @@ import {sendData} from './api.js';
 const form = document.querySelector('.img-upload__form');
 const templateSuccess = document.querySelector('#success');
 const templateError = document.querySelector('#error');
+const submitButton = form.querySelector('.img-upload__submit');
 
 let notificationElement;
 let notificationCancel;
@@ -76,6 +77,15 @@ function closeNotification() {
   }
 }
 
+function blockSubmitButton (){
+  submitButton.disabled = true;
+  submitButton.textContent = 'Публикую';
+}
+function unblockSubmitButton (){
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+}
+
 function setUserFormSubmit(onSuccess) {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -83,9 +93,11 @@ function setUserFormSubmit(onSuccess) {
     if (isValid) {
       const formData = new FormData(evt.target);
 
+      blockSubmitButton();
       sendData(formData)
         .then((response) => {
           isResponseError = !response.ok;
+          unblockSubmitButton();
           showNotification(isResponseError);
           onSuccess(isResponseError);
         });
