@@ -1,10 +1,29 @@
+import {openModalBigPhoto, closeModalBigPhoto} from './render-big-picture.js';
+import {getData} from './api.js';
+
 const thumbnailContainer = document.querySelector('.pictures');
-const thumbnails = thumbnailContainer.querySelectorAll('.picture');
+const modalBigPicture = document.querySelector('.big-picture');
+const bigPictureCancel = modalBigPicture.querySelector('.big-picture__cancel');
 const thumbnailTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
-function renderThumbnailList (photoData) {
+let photoData;
+
+function showError() {
+  const errorTemplate = document.getElementById('data-error');
+  const clone = document.importNode(errorTemplate.content, true);
+  const errorElement = document.createElement('div');
+  errorElement.appendChild(clone);
+  document.body.appendChild(errorElement);
+
+  setTimeout(() => {
+    errorElement.remove();
+  }, 5000);
+}
+
+function renderThumbnailList (data) {
+  photoData = data;
   const photoListFragment = document.createDocumentFragment();
 
   photoData.forEach((element) => {
@@ -20,10 +39,21 @@ function renderThumbnailList (photoData) {
   thumbnailContainer.appendChild(photoListFragment);
 }
 
-function clearThumbnailList () {
-  thumbnails.forEach((element) => {
-    element.remove();
-  });
-}
 
-export {renderThumbnailList, clearThumbnailList};
+document.addEventListener('DOMContentLoaded', () => {
+  getData(renderThumbnailList, showError);
+});
+
+
+thumbnailContainer.addEventListener('click', (evt) =>{
+  const clickedThumbnail = evt.target.closest('.picture');
+
+  if (clickedThumbnail) {
+    evt.preventDefault();
+    openModalBigPhoto(clickedThumbnail.dataset.pictureId, photoData);
+  }
+});
+
+bigPictureCancel.addEventListener('click', () =>{
+  closeModalBigPhoto();
+});
