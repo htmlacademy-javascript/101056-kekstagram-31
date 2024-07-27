@@ -1,5 +1,6 @@
 import {openModalBigPhoto, closeModalBigPhoto} from './render-big-picture.js';
 import {getData} from './api.js';
+import {showFilters} from './filters.js';
 
 const thumbnailContainer = document.querySelector('.pictures');
 const modalBigPicture = document.querySelector('.big-picture');
@@ -9,6 +10,10 @@ const thumbnailTemplate = document.querySelector('#picture')
   .querySelector('.picture');
 
 let photoData;
+
+function getDataForFiltering (){
+  return photoData;
+}
 
 function showError() {
   const errorTemplate = document.getElementById('data-error');
@@ -26,7 +31,7 @@ function renderThumbnailList (data) {
   photoData = data;
   const photoListFragment = document.createDocumentFragment();
 
-  photoData.forEach((element) => {
+  data.forEach((element) => {
     const photoElement = thumbnailTemplate.cloneNode(true);
     photoElement.dataset.pictureId = element.id;
     photoElement.querySelector('img').src = element.url;
@@ -40,8 +45,14 @@ function renderThumbnailList (data) {
 }
 
 
+function onSuccess (data){
+  renderThumbnailList(data, true);
+  getDataForFiltering(data);
+  showFilters();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  getData(renderThumbnailList, showError);
+  getData(onSuccess, showError);
 });
 
 
@@ -57,3 +68,5 @@ thumbnailContainer.addEventListener('click', (evt) =>{
 bigPictureCancel.addEventListener('click', () =>{
   closeModalBigPhoto();
 });
+
+export {renderThumbnailList, getDataForFiltering};

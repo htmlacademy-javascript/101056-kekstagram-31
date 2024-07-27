@@ -59,7 +59,7 @@ function showError() {
 
   setTimeout(() => {
     errorElement.remove();
-  }, 5000);
+  }, 2000);
 }
 
 function openForm () {
