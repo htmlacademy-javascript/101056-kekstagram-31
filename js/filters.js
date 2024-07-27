@@ -1,4 +1,4 @@
-import {getRandomNumber} from './util.js';
+import {sortArrayDescending, shuffleArray} from './util.js';
 import {renderThumbnailList, getDataForFiltering} from './render-thumbnails.js';
 
 const imgFilters = document.querySelector('.img-filters');
@@ -38,23 +38,10 @@ function changeThumbnailList (evt){
     renderThumbnailList(shuffledPhotoData,);
 
   } else if (evt.target.closest('#filter-discussed')){
-    const sortedByCommentsCountPhotoData = sortDescending(photoData.slice());
+    const sortedByCommentsCountPhotoData = sortArrayDescending(photoData.slice(), (item) => item.comments.length);
     clearThumbnailList();
     renderThumbnailList(sortedByCommentsCountPhotoData,);
   }
-}
-
-
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = getRandomNumber(0, i + 1);
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-
-function sortDescending(array) {
-  return [...array].sort((a, b) => b.comments.length - a.comments.length);
 }
 
 export {showFilters};

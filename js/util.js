@@ -47,5 +47,17 @@ function hasDuplicates(array) {
   return new Set(array).size !== array.length;
 }
 
-export {getRandomNumber, getRandomString, getUniqueID, isEscapeKey, isEnterKey, hasDuplicates};
-// export {hasDuplicates, isEscapeKey};
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = getRandomNumber(0, i + 1);
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function sortArrayDescending(array, compareFunction) {
+  return [...array].sort((a, b) => compareFunction(b) - compareFunction(a));
+}
+
+export {getRandomNumber, getRandomString, getUniqueID, isEscapeKey, isEnterKey, hasDuplicates, shuffleArray, sortArrayDescending};
+
