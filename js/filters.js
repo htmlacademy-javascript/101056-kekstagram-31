@@ -1,13 +1,12 @@
 import {sortArrayDescending, shuffleArray} from './util.js';
-import {renderThumbnailList, getDataForFiltering} from './render-thumbnails.js';
+import {renderThumbnailList} from './render-thumbnails.js';
 
 const imgFilters = document.querySelector('.img-filters');
 
-let photoData;
 
-function showFilters (){
+function showFilters (data){
   imgFilters.classList.remove('img-filters--inactive');
-  photoData = getDataForFiltering();
+  setFiltersClick(data);
 }
 
 function clearThumbnailList () {
@@ -17,39 +16,40 @@ function clearThumbnailList () {
   });
 }
 
-function changeThumbnailList (evt){
-  if (evt.target.closest('#filter-default')){
-    clearThumbnailList();
-    renderThumbnailList(photoData,);
+function setFiltersClick (data) {
+  imgFilters.addEventListener('click', (evt) => {
+    if (evt.target.classList.contains('img-filters__button')) {
+      const buttons = imgFilters.querySelectorAll('.img-filters__button');
+      const button = evt.target.closest('.img-filters__button');
 
-  } else if (evt.target.closest('#filter-random')){
-    const shuffledPhotoData = shuffleArray(photoData.slice());
-    clearThumbnailList();
-    renderThumbnailList(shuffledPhotoData,);
-
-  } else if (evt.target.closest('#filter-discussed')){
-    const sortedByCommentsCountPhotoData = sortArrayDescending(photoData.slice(), (item) => item.comments.length);
-    clearThumbnailList();
-    renderThumbnailList(sortedByCommentsCountPhotoData,);
-  }
+      if (
+        button
+        && !button.classList.contains('img-filters__button--active')
+        || evt.target.closest('#filter-random')
+      ){
+        buttons.forEach((btn) => btn.classList.remove('img-filters__button--active'));
+        evt.target.classList.add('img-filters__button--active');
+        changeThumbnailList(evt, data);
+      }
+    }
+  });
 }
 
-imgFilters.addEventListener('click', (evt) => {
-  if (evt.target.classList.contains('img-filters__button')) {
-    const buttons = imgFilters.querySelectorAll('.img-filters__button');
-    const button = evt.target.closest('.img-filters__button');
+function changeThumbnailList(evt, data) {
+  const filterActions = {
+    'filter-default': () => data,
+    'filter-random': () => shuffleArray(data.slice()),
+    'filter-discussed': () => sortArrayDescending(data.slice(), (item) => item.comments.length),
+  };
 
-    if (
-      button
-      && !button.classList.contains('img-filters__button--active')
-      || evt.target.closest('#filter-random')
-    ){
-      buttons.forEach((btn) => btn.classList.remove('img-filters__button--active'));
-      evt.target.classList.add('img-filters__button--active');
-      changeThumbnailList(evt);
-    }
+  const filterButton = Object.keys(filterActions).find((filter) => evt.target.closest(`#${filter}`));
+
+  if (filterButton) {
+    clearThumbnailList();
+    const filteredPhotoData = filterActions[filterButton]();
+    renderThumbnailList(filteredPhotoData);
   }
-});
+}
 
 export {showFilters};
 

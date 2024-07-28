@@ -9,26 +9,8 @@ const thumbnailTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
-let photoData;
-
-function getDataForFiltering (){
-  return photoData;
-}
-
-function showError() {
-  const errorTemplate = document.getElementById('data-error');
-  const clone = document.importNode(errorTemplate.content, true);
-  const errorElement = document.createElement('div');
-  errorElement.appendChild(clone);
-  document.body.appendChild(errorElement);
-
-  setTimeout(() => {
-    errorElement.remove();
-  }, 5000);
-}
 
 function renderThumbnailList (data) {
-  photoData = data;
   const photoListFragment = document.createDocumentFragment();
 
   data.forEach((element) => {
@@ -44,11 +26,37 @@ function renderThumbnailList (data) {
   thumbnailContainer.appendChild(photoListFragment);
 }
 
+function setThumbnailsClick (data) {
+  thumbnailContainer.addEventListener('click', (evt) =>{
+    const clickedThumbnail = evt.target.closest('.picture');
+
+    if (clickedThumbnail) {
+      evt.preventDefault();
+      openModalBigPhoto(clickedThumbnail.dataset.pictureId, data);
+    }
+  });
+
+  bigPictureCancel.addEventListener('click', () =>{
+    closeModalBigPhoto();
+  });
+}
+
+function showError() {
+  const errorTemplate = document.getElementById('data-error');
+  const clone = document.importNode(errorTemplate.content, true);
+  const errorElement = document.createElement('div');
+  errorElement.appendChild(clone);
+  document.body.appendChild(errorElement);
+
+  setTimeout(() => {
+    errorElement.remove();
+  }, 5000);
+}
 
 function onSuccess (data){
-  renderThumbnailList(data, true);
-  getDataForFiltering(data);
-  showFilters();
+  renderThumbnailList(data);
+  showFilters(data);
+  setThumbnailsClick(data);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -56,17 +64,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-thumbnailContainer.addEventListener('click', (evt) =>{
-  const clickedThumbnail = evt.target.closest('.picture');
-
-  if (clickedThumbnail) {
-    evt.preventDefault();
-    openModalBigPhoto(clickedThumbnail.dataset.pictureId, photoData);
-  }
-});
-
-bigPictureCancel.addEventListener('click', () =>{
-  closeModalBigPhoto();
-});
-
-export {renderThumbnailList, getDataForFiltering};
+export {renderThumbnailList};
