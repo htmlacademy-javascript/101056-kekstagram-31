@@ -20,10 +20,17 @@ function clearThumbnailList () {
 imgFilters.addEventListener('click', (evt) => {
   if (evt.target.classList.contains('img-filters__button')) {
     const buttons = imgFilters.querySelectorAll('.img-filters__button');
-    buttons.forEach((btn) => btn.classList.remove('img-filters__button--active'));
+    const button = evt.target.closest('.img-filters__button');
 
-    evt.target.classList.add('img-filters__button--active');
-    changeThumbnailList(evt);
+    if (
+      button
+      && !button.classList.contains('img-filters__button--active')
+      || evt.target.closest('#filter-random')
+    ){
+      buttons.forEach((btn) => btn.classList.remove('img-filters__button--active'));
+      evt.target.classList.add('img-filters__button--active');
+      changeThumbnailList(evt);
+    }
   }
 });
 
