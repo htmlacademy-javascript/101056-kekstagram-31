@@ -55,7 +55,7 @@ function showError() {
   errorElement.appendChild(clone);
   document.body.appendChild(errorElement);
   const errorText = document.body.querySelector('.data-error__title');
-  errorText.textContent = 'Не верный формат файла';
+  errorText.textContent = 'Не верный формат файла. Загружайте: .jpg / .jpeg / .png';
 
   setTimeout(() => {
     errorElement.remove();

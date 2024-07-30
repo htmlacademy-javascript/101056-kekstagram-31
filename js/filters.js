@@ -3,6 +3,7 @@ import {renderThumbnailList} from './render-thumbnails.js';
 import {debounce} from './util.js';
 
 const RERENDER_DELAY = 500;
+const PICTURE_COUNT = 10;
 
 const imgFilters = document.querySelector('.img-filters');
 
@@ -44,7 +45,7 @@ function setFiltersClick(data) {
 function changeThumbnailList(evt, data) {
   const filterActions = {
     'filter-default': () => data,
-    'filter-random': () => shuffleArray(data.slice()),
+    'filter-random': () => shuffleArray(data.slice()).slice(0, PICTURE_COUNT),
     'filter-discussed': () => sortArrayDescending(data.slice(), (item) => item.comments.length),
   };
 
