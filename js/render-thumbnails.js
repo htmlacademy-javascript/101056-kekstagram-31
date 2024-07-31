@@ -71,7 +71,7 @@ const showError = () => {
 };
 
 const onSuccess = (data) => {
-  renderThumbnailList(data);
+  renderThumbnailListWithRetry(data);
   showFilters(data);
   setThumbnailsClick(data);
 };

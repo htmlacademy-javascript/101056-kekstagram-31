@@ -3,11 +3,15 @@ const getData = (onSuccess, onFail) => {
     .then((response) => {
       if (!response.ok) {
         onFail();
+        throw new Error(`Ошибка сети: ${response.status} ${response.statusText}`);
       }
       return response.json();
     })
     .then((data) => {
       onSuccess(data);
+    })
+    .catch((error) => {
+      throw new Error(`Произошла ошибка: ${error.message}`);
     });
 };
 
