@@ -5,35 +5,7 @@ const getRandomNumber = (from, to) => {
   return Math.floor(result);
 };
 
-const isInteger = (value) => /^\d+$/.test(value);
-
-const getRandomString = (desiredStringLength = 1) => {
-  const primer = ' ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let randomString = '';
-  for (let i = 0; i < desiredStringLength; i++) {
-    if (isInteger(i / 45)) {
-      randomString += ' ';
-    }
-    randomString += primer.charAt(Math.floor(Math.random() * primer.length));
-  }
-  return randomString;
-};
-
-const getUniqueID = (from, to) => {
-  let id = from;
-  const ids = new Set();
-  return () => {
-    while (ids.has(id)) {
-      id = getRandomNumber(from, to);
-    }
-    ids.add(id);
-    return id;
-  };
-};
-
 const isEscapeKey = (evt) => evt.keyCode === 27;
-
-const isEnterKey = (evt) => evt.keyCode === 13;
 
 const hasDuplicates = (array) => new Set(array).size !== array.length;
 
@@ -57,11 +29,7 @@ const debounce = (cb, timeoutDelay) => {
 };
 
 export {
-  getRandomNumber,
-  getRandomString,
-  getUniqueID,
   isEscapeKey,
-  isEnterKey,
   hasDuplicates,
   shuffleArray,
   sortArrayDescending,

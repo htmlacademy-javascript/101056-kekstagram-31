@@ -1,6 +1,5 @@
-import { sortArrayDescending, shuffleArray } from './util.js';
+import { sortArrayDescending, shuffleArray, debounce } from './util.js';
 import { renderThumbnailListWithRetry } from './render-thumbnails.js';
-import { debounce } from './util.js';
 
 const RERENDER_DELAY = 500;
 const PICTURE_COUNT = 10;

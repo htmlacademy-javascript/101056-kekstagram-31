@@ -1,6 +1,6 @@
-import {openModalBigPhoto, closeModalBigPhoto} from './render-big-picture.js';
-import {getData} from './api.js';
-import {showFilters} from './filters.js';
+import { openModalBigPhoto, closeModalBigPhoto } from './render-big-picture.js';
+import { getData } from './api.js';
+import { showFilters } from './filters.js';
 
 const thumbnailContainer = document.querySelector('.pictures');
 const modalBigPicture = document.querySelector('.big-picture');
@@ -80,4 +80,4 @@ document.addEventListener('DOMContentLoaded', () => {
   getData(onSuccess, showError);
 });
 
-export {renderThumbnailListWithRetry};
+export { renderThumbnailListWithRetry };
