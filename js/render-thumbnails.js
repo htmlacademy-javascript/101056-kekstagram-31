@@ -9,8 +9,23 @@ const thumbnailTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
+const renderThumbnailList = (data) => {
+  const photoListFragment = document.createDocumentFragment();
 
-function renderThumbnailListWithRetry(data) {
+  data.forEach((element) => {
+    const photoElement = thumbnailTemplate.cloneNode(true);
+    photoElement.dataset.pictureId = element.id;
+    photoElement.querySelector('img').src = element.url;
+    photoElement.querySelector('img').alt = element.description;
+    photoElement.querySelector('.picture__likes').textContent = element.likes;
+    photoElement.querySelector('.picture__comments').textContent = element.comments.length;
+    photoListFragment.appendChild(photoElement);
+  });
+
+  thumbnailContainer.appendChild(photoListFragment);
+};
+
+const renderThumbnailListWithRetry = (data) => {
   const attemptRender = (retries) => {
     try {
       renderThumbnailList(data);
@@ -26,26 +41,10 @@ function renderThumbnailListWithRetry(data) {
   };
 
   attemptRender(2);
-}
+};
 
-function renderThumbnailList(data) {
-  const photoListFragment = document.createDocumentFragment();
-
-  data.forEach((element) => {
-    const photoElement = thumbnailTemplate.cloneNode(true);
-    photoElement.dataset.pictureId = element.id;
-    photoElement.querySelector('img').src = element.url;
-    photoElement.querySelector('img').alt = element.description;
-    photoElement.querySelector('.picture__likes').textContent = element.likes;
-    photoElement.querySelector('.picture__comments').textContent = element.comments.length;
-    photoListFragment.appendChild(photoElement);
-  });
-
-  thumbnailContainer.appendChild(photoListFragment);
-}
-
-function setThumbnailsClick (data) {
-  thumbnailContainer.addEventListener('click', (evt) =>{
+const setThumbnailsClick = (data) => {
+  thumbnailContainer.addEventListener('click', (evt) => {
     const clickedThumbnail = evt.target.closest('.picture');
 
     if (clickedThumbnail) {
@@ -54,12 +53,12 @@ function setThumbnailsClick (data) {
     }
   });
 
-  bigPictureCancel.addEventListener('click', () =>{
+  bigPictureCancel.addEventListener('click', () => {
     closeModalBigPhoto();
   });
-}
+};
 
-function showError() {
+const showError = () => {
   const errorTemplate = document.getElementById('data-error');
   const clone = document.importNode(errorTemplate.content, true);
   const errorElement = document.createElement('div');
@@ -69,17 +68,16 @@ function showError() {
   setTimeout(() => {
     errorElement.remove();
   }, 5000);
-}
+};
 
-function onSuccess (data){
+const onSuccess = (data) => {
   renderThumbnailList(data);
   showFilters(data);
   setThumbnailsClick(data);
-}
+};
 
 document.addEventListener('DOMContentLoaded', () => {
   getData(onSuccess, showError);
 });
-
 
 export {renderThumbnailListWithRetry};

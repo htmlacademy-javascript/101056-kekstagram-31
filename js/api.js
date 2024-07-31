@@ -1,4 +1,4 @@
-function getData(onSuccess, onFail){
+const getData = (onSuccess, onFail) => {
   fetch('https://32.javascript.htmlacademy.pro/kekstagram/data')
     .then((response) => {
       if (!response.ok) {
@@ -9,17 +9,12 @@ function getData(onSuccess, onFail){
     .then((data) => {
       onSuccess(data);
     });
-}
+};
 
+const sendData = (formData) =>
+  fetch('https://32.javascript.htmlacademy.pro/kekstagram', {
+    method: 'POST',
+    body: formData,
+  });
 
-function sendData(formData){
-  return fetch(
-    'https://32.javascript.htmlacademy.pro/kekstagram',
-    {
-      method: 'POST',
-      body: formData,
-    },
-  );
-}
-
-export {getData, sendData};
+export { getData, sendData };

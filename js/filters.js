@@ -1,25 +1,36 @@
-import {sortArrayDescending, shuffleArray} from './util.js';
-import {renderThumbnailListWithRetry} from './render-thumbnails.js';
-import {debounce} from './util.js';
+import { sortArrayDescending, shuffleArray } from './util.js';
+import { renderThumbnailListWithRetry } from './render-thumbnails.js';
+import { debounce } from './util.js';
 
 const RERENDER_DELAY = 500;
 const PICTURE_COUNT = 10;
 
 const imgFilters = document.querySelector('.img-filters');
 
-function showFilters (data){
-  imgFilters.classList.remove('img-filters--inactive');
-  setFiltersClick(data);
-}
-
-function clearThumbnailList () {
+const clearThumbnailList = () => {
   const thumbnails = document.querySelectorAll('.picture');
   thumbnails.forEach((element) => {
     element.remove();
   });
-}
+};
 
-function setFiltersClick(data) {
+const changeThumbnailList = (evt, data) => {
+  const filterActions = {
+    'filter-default': () => data,
+    'filter-random': () => shuffleArray(data.slice()).slice(0, PICTURE_COUNT),
+    'filter-discussed': () => sortArrayDescending(data.slice(), (item) => item.comments.length),
+  };
+
+  const filterButton = Object.keys(filterActions).find((filter) => evt.target.closest(`#${filter}`));
+
+  if (filterButton) {
+    clearThumbnailList();
+    const filteredPhotoData = filterActions[filterButton]();
+    renderThumbnailListWithRetry(filteredPhotoData);
+  }
+};
+
+const setFiltersClick = (data) => {
   const handleThumbnailChange = debounce((evt) => {
     changeThumbnailList(evt, data);
   }, RERENDER_DELAY);
@@ -40,23 +51,11 @@ function setFiltersClick(data) {
       }
     }
   });
-}
+};
 
-function changeThumbnailList(evt, data) {
-  const filterActions = {
-    'filter-default': () => data,
-    'filter-random': () => shuffleArray(data.slice()).slice(0, PICTURE_COUNT),
-    'filter-discussed': () => sortArrayDescending(data.slice(), (item) => item.comments.length),
-  };
+const showFilters = (data) => {
+  imgFilters.classList.remove('img-filters--inactive');
+  setFiltersClick(data);
+};
 
-  const filterButton = Object.keys(filterActions).find((filter) => evt.target.closest(`#${filter}`));
-
-  if (filterButton) {
-    clearThumbnailList();
-    const filteredPhotoData = filterActions[filterButton]();
-    renderThumbnailListWithRetry(filteredPhotoData);
-  }
-}
-
-export {showFilters};
-
+export { showFilters };

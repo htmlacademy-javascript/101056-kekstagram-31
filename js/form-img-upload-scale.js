@@ -4,7 +4,7 @@ const imgUploadPreview = document.querySelector('.img-upload__preview img');
 
 const STEP = 25;
 
-function updateImageScale(formStep) {
+const updateImageScale = (formStep) => {
   const value = parseInt(controlValue.value.slice(0, -1), 10);
   let scaleValue = value + formStep;
 
@@ -17,9 +17,9 @@ function updateImageScale(formStep) {
   const transformValue = `scale(${scaleValue / 100})`;
   imgUploadPreview.style.transform = transformValue;
   controlValue.value = `${scaleValue}%`;
-}
+};
 
-function onFormClickScaleButtons(evt) {
+const onFormClickScaleButtons = (evt) => {
   const clickedElementClassList = evt.target.classList;
 
   if (clickedElementClassList.contains('scale__control--bigger')) {
@@ -27,6 +27,6 @@ function onFormClickScaleButtons(evt) {
   } else if (clickedElementClassList.contains('scale__control--smaller')) {
     updateImageScale(-STEP);
   }
-}
+};
 
-export {onFormClickScaleButtons, updateImageScale};
+export { onFormClickScaleButtons, updateImageScale };
