@@ -10,7 +10,25 @@ const thumbnailTemplate = document.querySelector('#picture')
   .querySelector('.picture');
 
 
-function renderThumbnailList (data) {
+function renderThumbnailListWithRetry(data) {
+  const attemptRender = (retries) => {
+    try {
+      renderThumbnailList(data);
+    } catch (error) {
+      if (retries > 0) {
+        setTimeout(() => {
+          attemptRender(retries - 1);
+        }, 500);
+      } else {
+        throw new Error('Не удалось выполнить renderThumbnailList');
+      }
+    }
+  };
+
+  attemptRender(2);
+}
+
+function renderThumbnailList(data) {
   const photoListFragment = document.createDocumentFragment();
 
   data.forEach((element) => {
@@ -64,4 +82,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-export {renderThumbnailList};
+export {renderThumbnailListWithRetry};

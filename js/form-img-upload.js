@@ -66,7 +66,7 @@ function openForm () {
   const file = formImgUploadInput.files[0];
   const fileName = file.name;
 
-  if ((fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png'))){
+  if (file && ((fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png')))){
     const imageURL = URL.createObjectURL(file);
     formImgUploadPreview.querySelector('img').src = imageURL;
 

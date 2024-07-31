@@ -1,4 +1,4 @@
-const COMMENTS_COUNT = 5; // сколько комментариев за раз показывается под фото
+const COMMENTS_COUNT = 5;
 let comments = [];
 
 const bigPictureSocial = document.querySelector('.big-picture__social');

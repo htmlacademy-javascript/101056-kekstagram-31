@@ -91,20 +91,24 @@ function unblockSubmitButton (){
 }
 
 function setUserFormSubmit(onSuccess) {
-  form.addEventListener('submit', (evt) => {
+  form.addEventListener('submit', async (evt) => {
     evt.preventDefault();
-    const isValid = pristine.validate();
-    if (isValid) {
-      const formData = new FormData(evt.target);
 
-      blockSubmitButton();
-      sendData(formData)
-        .then((response) => {
-          isResponseError = !response.ok;
-          unblockSubmitButton();
-          showNotification(isResponseError);
-          onSuccess(isResponseError);
-        });
+    const isValid = pristine.validate();
+    if (!isValid) {
+      return;
+    }
+
+    const formData = new FormData(evt.target);
+    blockSubmitButton();
+
+    try {
+      const response = await sendData(formData);
+      isResponseError = !response.ok;
+      showNotification(isResponseError);
+      onSuccess(isResponseError);
+    } finally {
+      unblockSubmitButton();
     }
   });
 }
