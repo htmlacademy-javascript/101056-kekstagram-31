@@ -13,6 +13,7 @@ const formImgUploadCancel = formImgUploadOverlay.querySelector('.img-upload__can
 const formImgUploadScale = formImgUploadWrapper.querySelector('.img-upload__scale');
 const imgUploadEffects = formImgUploadWrapper.querySelector('.img-upload__effects');
 const slider = formImgUploadWrapper.querySelector('.img-upload__effect-level');
+const previews = formImgUploadWrapper.querySelectorAll('.effects__preview');
 
 const showError = () => {
   const existingError = document.querySelector('.data-error');
@@ -35,12 +36,18 @@ const showError = () => {
 
 const openForm = () => {
   const file = formImgUploadInput.files[0];
-  const fileName = file.name;
+  const fileName = file ? file.name.toLowerCase() : '';
 
   if (file && (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png'))) {
-    const imageURL = URL.createObjectURL(file);
-    formImgUploadPreview.querySelector('img').src = imageURL;
+    const fileURL = URL.createObjectURL(file);
+    formImgUploadPreview.querySelector('img').src = fileURL;
 
+    previews.forEach((preview) => {
+      preview.style.backgroundImage = `url(${fileURL})`;
+      preview.style.backgroundSize = 'cover';
+    });
+
+    document.body.classList.add('modal-open');
     formImgUploadOverlay.classList.remove('hidden');
     slider.classList.add('hidden');
 
@@ -57,11 +64,16 @@ const openForm = () => {
 const resetForm = () => {
   form.reset();
   formImgUploadPreview.querySelector('img').src = 'img/upload-default-image.jpg';
+  previews.forEach((preview) => {
+    preview.style.backgroundImage = '';
+    preview.style.backgroundSize = '';
+  });
   resetFilter();
   updateImageScale(100);
 };
 
 const closeForm = (isError) => {
+  document.body.classList.remove('modal-open');
   formImgUploadOverlay.classList.add('hidden');
 
   if (!isError) {
@@ -77,8 +89,7 @@ const closeForm = (isError) => {
 function onFormEsc (evt) {
   if (
     isEscapeKey(evt)
-    && !document.activeElement.querySelector('.text__hashtags')
-    && !document.activeElement.querySelector('.text__description')
+    && !formImgUploadOverlay.classList.contains('hidden')
   ) {
     evt.preventDefault();
     closeForm();
