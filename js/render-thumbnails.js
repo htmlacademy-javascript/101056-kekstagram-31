@@ -1,5 +1,4 @@
 import { openModalBigPhoto, closeModalBigPhoto } from './render-big-picture.js';
-import { getData } from './api.js';
 import { showFilters } from './filters.js';
 
 const thumbnailContainer = document.querySelector('.pictures');
@@ -25,23 +24,23 @@ const renderThumbnailList = (data) => {
   thumbnailContainer.appendChild(photoListFragment);
 };
 
-const renderThumbnailListWithRetry = (data) => {
-  const attemptRender = (retries) => {
-    try {
-      renderThumbnailList(data);
-    } catch (error) {
-      if (retries > 0) {
-        setTimeout(() => {
-          attemptRender(retries - 1);
-        }, 500);
-      } else {
-        throw new Error('Не удалось выполнить renderThumbnailList');
-      }
-    }
-  };
+// const renderThumbnailListWithRetry = (data) => {
+//   const attemptRender = (retries) => {
+//     try {
+//       renderThumbnailList(data);
+//     } catch (error) {
+//       if (retries > 0) {
+//         setTimeout(() => {
+//           attemptRender(retries - 1);
+//         }, 500);
+//       } else {
+//         throw new Error('Не удалось выполнить renderThumbnailList');
+//       }
+//     }
+//   };
 
-  attemptRender(2);
-};
+//   attemptRender(2);
+// };
 
 const setThumbnailsClick = (data) => {
   thumbnailContainer.addEventListener('click', (evt) => {
@@ -70,14 +69,10 @@ const showError = () => {
   }, 5000);
 };
 
-const onSuccess = (data) => {
-  renderThumbnailListWithRetry(data);
-  showFilters(data);
-  setThumbnailsClick(data);
-};
+// const showThumbnailList = (data) => {
+//   renderThumbnailList(data);
+//   showFilters(data);
+//   setThumbnailsClick(data);
+// };
 
-document.addEventListener('DOMContentLoaded', () => {
-  getData(onSuccess, showError);
-});
-
-export { renderThumbnailListWithRetry };
+export { renderThumbnailList, showError, showFilters, setThumbnailsClick };

@@ -13,7 +13,7 @@ const formImgUploadWrapper = document.querySelector('.img-upload__wrapper');
 const slider = formImgUploadWrapper.querySelector('.img-upload__effect-level');
 const levelSlider = formImgUploadWrapper.querySelector('.effect-level__slider');
 const levelValue = formImgUploadWrapper.querySelector('.effect-level__value');
-const imgUploadPreview = formImgUploadWrapper.querySelector('.img-upload__preview');
+const imgUploadPreview = formImgUploadWrapper.querySelector('.img-upload__preview img');
 const noneRadioButton = formImgUploadWrapper.querySelector('#effect-none');
 
 const changeFilter = (value) => {
@@ -49,6 +49,7 @@ levelSlider.noUiSlider.on('update', () => {
 levelSlider.setAttribute('disabled', true);
 
 const resetFilter = () => {
+  currentFilter = 'none';
   noneRadioButton.checked = true;
   levelSlider.noUiSlider.set(0);
   levelSlider.setAttribute('disabled', true);

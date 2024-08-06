@@ -21,6 +21,10 @@ const pristine = new Pristine(form, {
 pristine.addValidator(form.querySelector('.text__hashtags'), validateHashtags, getErrorText);
 pristine.addValidator(form.querySelector('.text__description'), validateDescription, getErrorText);
 
+const resetPristin = () => {
+  pristine.reset();
+};
+
 
 const closeNotification = () => {
   if (isResponseError) {
@@ -107,4 +111,4 @@ function onNotificationEsc (evt){
   }
 }
 
-export { setUserFormSubmit };
+export { setUserFormSubmit, resetPristin };

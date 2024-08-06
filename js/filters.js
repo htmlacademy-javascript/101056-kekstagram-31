@@ -1,5 +1,5 @@
 import { sortArrayDescending, shuffleArray, debounce } from './util.js';
-import { renderThumbnailListWithRetry } from './render-thumbnails.js';
+import { renderThumbnailList } from './render-thumbnails.js';
 
 const RERENDER_DELAY = 500;
 const PICTURE_COUNT = 10;
@@ -25,7 +25,7 @@ const changeThumbnailList = (evt, data) => {
   if (filterButton) {
     clearThumbnailList();
     const filteredPhotoData = filterActions[filterButton]();
-    renderThumbnailListWithRetry(filteredPhotoData);
+    renderThumbnailList(filteredPhotoData);
   }
 };
 

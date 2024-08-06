@@ -1,6 +1,6 @@
 import { hasDuplicates } from './util.js';
 
-const PATTERN = /^[#a-zа-яё0-9]+$/;
+const PATTERN = /^#[a-zа-яё0-9]+$/;
 const HASHTAGS_MAX = 5;
 let errorText = '';
 

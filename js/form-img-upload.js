@@ -1,6 +1,7 @@
 import { isEscapeKey } from './util.js';
 import { onFormClickScaleButtons, updateImageScale } from './form-img-upload-scale.js';
 import { onFormClickFilter, resetFilter } from './form-img-upload-slider.js';
+import { resetPristin } from './form-img-upload-sending-data.js';
 
 const form = document.querySelector('.img-upload__form');
 const formImgUploadInput = form.querySelector('.img-upload__input');
@@ -14,6 +15,7 @@ const formImgUploadScale = formImgUploadWrapper.querySelector('.img-upload__scal
 const imgUploadEffects = formImgUploadWrapper.querySelector('.img-upload__effects');
 const slider = formImgUploadWrapper.querySelector('.img-upload__effect-level');
 const previews = formImgUploadWrapper.querySelectorAll('.effects__preview');
+
 
 const showError = () => {
   const existingError = document.querySelector('.data-error');
@@ -53,6 +55,7 @@ const openForm = () => {
 
     formImgUploadCancel.addEventListener('click', onFormClickCancel);
     document.addEventListener('keydown', onFormEsc);
+
     formImgUploadScale.addEventListener('click', onFormClickScaleButtons);
     imgUploadEffects.addEventListener('change', onFormClickFilter);
   } else {
@@ -70,6 +73,7 @@ const resetForm = () => {
   });
   resetFilter();
   updateImageScale(100);
+  resetPristin();
 };
 
 const closeForm = (isError) => {
@@ -87,10 +91,18 @@ const closeForm = (isError) => {
 };
 
 function onFormEsc (evt) {
-  if (
-    isEscapeKey(evt)
-    && !formImgUploadOverlay.classList.contains('hidden')
-  ) {
+
+  if (isEscapeKey(evt) && !formImgUploadOverlay.classList.contains('hidden')) {
+
+    const hashtagsInput = form.querySelector('.text__hashtags');
+    const descriptionInput = form.querySelector('.text__description');
+
+    if (document.activeElement === hashtagsInput || document.activeElement === descriptionInput) {
+
+      evt.preventDefault();
+      return;
+    }
+
     evt.preventDefault();
     closeForm();
   }
