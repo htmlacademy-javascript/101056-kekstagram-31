@@ -1,27 +1,11 @@
-const URL_TO_GET_DATA = 'https://32.javascript.htmlacademy.pro/kekstagram/data';
-const URL_TO_SEND_DATA = 'https://32.javascript.htmlacademy.pro/kekstagram';
+const BASE_URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
+const API_ROUTE = {
+  GET: `${BASE_URL}/data`,
+  POST: `${BASE_URL}/`,
+};
 
 
-// const getData = (onSuccess, onFail) => {
-//   fetch(URL_TO_GET_DATA)
-//     .then((response) => {
-//       if (!response.ok) {
-//         onFail();
-//         throw new Error(`Ошибка сети: ${response.status} ${response.statusText}`);
-//       }
-//       return response.json();
-//     })
-//     .then((data) => {
-//       onSuccess(data);
-//     })
-//     .catch((error) => {
-//       throw new Error(`Произошла ошибка: ${error.message}`);
-//     });
-// };
-
-const getData = (successCallback, errorCallback) => fetch(URL_TO_GET_DATA, {
-  method: 'GET',
-})
+const getData = (successCallback, errorCallback) => fetch(API_ROUTE.GET)
   .then((response) => {
     if (!response.ok) {
       throw new Error(`Ошибка сети: ${response.status} ${response.statusText}`);
@@ -32,7 +16,7 @@ const getData = (successCallback, errorCallback) => fetch(URL_TO_GET_DATA, {
   .catch(errorCallback);
 
 const sendData = (formData) =>
-  fetch(URL_TO_SEND_DATA, {
+  fetch(API_ROUTE.POST, {
     method: 'POST',
     body: formData,
   });

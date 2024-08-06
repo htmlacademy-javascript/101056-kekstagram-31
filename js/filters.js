@@ -1,5 +1,5 @@
 import { sortArrayDescending, shuffleArray, debounce } from './util.js';
-import { renderThumbnailList } from './render-thumbnails.js';
+import { renderThumbnailListWithRetry } from './render-thumbnails.js';
 
 const RERENDER_DELAY = 500;
 const PICTURE_COUNT = 10;
@@ -25,7 +25,7 @@ const changeThumbnailList = (evt, data) => {
   if (filterButton) {
     clearThumbnailList();
     const filteredPhotoData = filterActions[filterButton]();
-    renderThumbnailList(filteredPhotoData);
+    renderThumbnailListWithRetry(filteredPhotoData);
   }
 };
 
@@ -40,8 +40,7 @@ const setFiltersClick = (data) => {
       const button = evt.target.closest('.img-filters__button');
 
       if (
-        (button && !button.classList.contains('img-filters__button--active')) ||
-        evt.target.closest('#filter-random')
+        (button && !button.classList.contains('img-filters__button--active'))
       ) {
         buttons.forEach((btn) => btn.classList.remove('img-filters__button--active'));
         button.classList.add('img-filters__button--active');

@@ -24,23 +24,23 @@ const renderThumbnailList = (data) => {
   thumbnailContainer.appendChild(photoListFragment);
 };
 
-// const renderThumbnailListWithRetry = (data) => {
-//   const attemptRender = (retries) => {
-//     try {
-//       renderThumbnailList(data);
-//     } catch (error) {
-//       if (retries > 0) {
-//         setTimeout(() => {
-//           attemptRender(retries - 1);
-//         }, 500);
-//       } else {
-//         throw new Error('Не удалось выполнить renderThumbnailList');
-//       }
-//     }
-//   };
+const renderThumbnailListWithRetry = (data) => {
+  const attemptRender = (retries) => {
+    try {
+      renderThumbnailList(data);
+    } catch (error) {
+      if (retries > 0) {
+        setTimeout(() => {
+          attemptRender(retries - 1);
+        }, 500);
+      } else {
+        throw new Error('Не удалось выполнить renderThumbnailList');
+      }
+    }
+  };
 
-//   attemptRender(2);
-// };
+  attemptRender(2);
+};
 
 const setThumbnailsClick = (data) => {
   thumbnailContainer.addEventListener('click', (evt) => {
@@ -69,10 +69,5 @@ const showError = () => {
   }, 5000);
 };
 
-// const showThumbnailList = (data) => {
-//   renderThumbnailList(data);
-//   showFilters(data);
-//   setThumbnailsClick(data);
-// };
 
-export { renderThumbnailList, showError, showFilters, setThumbnailsClick };
+export { renderThumbnailListWithRetry, showError, showFilters, setThumbnailsClick };
