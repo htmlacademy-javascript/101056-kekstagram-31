@@ -1,13 +1,17 @@
+import { openModalBigPhoto, closeModalBigPhoto } from './render-big-picture.js';
+import { showFilters } from './filters.js';
+
 const thumbnailContainer = document.querySelector('.pictures');
-const thumbnails = thumbnailContainer.querySelectorAll('.picture');
+const modalBigPicture = document.querySelector('.big-picture');
+const bigPictureCancel = modalBigPicture.querySelector('.big-picture__cancel');
 const thumbnailTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
-function renderThumbnailList (photoData) {
+const renderThumbnailList = (data) => {
   const photoListFragment = document.createDocumentFragment();
 
-  photoData.forEach((element) => {
+  data.forEach((element) => {
     const photoElement = thumbnailTemplate.cloneNode(true);
     photoElement.dataset.pictureId = element.id;
     photoElement.querySelector('img').src = element.url;
@@ -18,12 +22,52 @@ function renderThumbnailList (photoData) {
   });
 
   thumbnailContainer.appendChild(photoListFragment);
-}
+};
 
-function clearThumbnailList () {
-  thumbnails.forEach((element) => {
-    element.remove();
+const renderThumbnailListWithRetry = (data) => {
+  const attemptRender = (retries) => {
+    try {
+      renderThumbnailList(data);
+    } catch (error) {
+      if (retries > 0) {
+        setTimeout(() => {
+          attemptRender(retries - 1);
+        }, 500);
+      } else {
+        throw new Error('Не удалось выполнить renderThumbnailList');
+      }
+    }
+  };
+
+  attemptRender(2);
+};
+
+const setThumbnailsClick = (data) => {
+  thumbnailContainer.addEventListener('click', (evt) => {
+    const clickedThumbnail = evt.target.closest('.picture');
+
+    if (clickedThumbnail) {
+      evt.preventDefault();
+      openModalBigPhoto(clickedThumbnail.dataset.pictureId, data);
+    }
   });
-}
 
-export {renderThumbnailList, clearThumbnailList};
+  bigPictureCancel.addEventListener('click', () => {
+    closeModalBigPhoto();
+  });
+};
+
+const showError = () => {
+  const errorTemplate = document.getElementById('data-error');
+  const clone = document.importNode(errorTemplate.content, true);
+  const errorElement = document.createElement('div');
+  errorElement.appendChild(clone);
+  document.body.appendChild(errorElement);
+
+  setTimeout(() => {
+    errorElement.remove();
+  }, 5000);
+};
+
+
+export { renderThumbnailListWithRetry, showError, showFilters, setThumbnailsClick };

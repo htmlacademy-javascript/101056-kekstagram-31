@@ -1,50 +1,37 @@
-function getRandomNumber (from, to) {
+const getRandomNumber = (from, to) => {
   const lower = Math.ceil(Math.min(from, to));
   const upper = Math.floor(Math.max(from, to));
   const result = Math.random() * (upper - lower + 1) + lower;
   return Math.floor(result);
-}
+};
 
+const isEscapeKey = (evt) => evt.keyCode === 27;
 
-function isInteger(value) {
-  return /^\d+$/.test(value);
-}
+const hasDuplicates = (array) => new Set(array).size !== array.length;
 
-function getRandomString (desiredStringLength = 1) {
-  const primer = ' ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let randomString = '';
-  for (let i = 0; i < desiredStringLength; i++) {
-    if (isInteger(i / 45)) {
-      randomString += ' ';
-    }
-    randomString += primer.charAt(Math.floor(Math.random() * primer.length));
+const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = getRandomNumber(0, i + 1);
+    [array[i], array[j]] = [array[j], array[i]];
   }
-  return randomString;
-}
+  return array;
+};
 
+const sortArrayDescending = (array, compareFunction) =>
+  [...array].sort((a, b) => compareFunction(b) - compareFunction(a));
 
-function getUniqueID(from, to) {
-  let id = from;
-  const ids = new Set();
-  return function (){
-    while (ids.has(id)) {
-      id = getRandomNumber(from, to);
-    }
-    ids.add(id);
-    return id;
+const debounce = (cb, timeoutDelay) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => cb.apply(this, rest), timeoutDelay);
   };
-}
+};
 
-function isEscapeKey (evt) {
-  return evt.keyCode === 27;
-}
-
-function isEnterKey (evt) {
-  return evt.keyCode === 13;
-}
-
-function hasDuplicates(array) {
-  return new Set(array).size !== array.length;
-}
-
-export {getRandomNumber, getRandomString, getUniqueID, isEscapeKey, isEnterKey, hasDuplicates};
+export {
+  isEscapeKey,
+  hasDuplicates,
+  shuffleArray,
+  sortArrayDescending,
+  debounce
+};

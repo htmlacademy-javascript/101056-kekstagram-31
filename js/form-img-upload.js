@@ -1,7 +1,7 @@
-import {isEscapeKey} from './util.js';
-import {validateHashtags, getErrorText, validateDescription} from './form-img-upload-validate.js';
-import {onFormClickScaleButtons, updateImageScale} from './form-img-upload-scale.js';
-import {onFormClickFilter, resetFilter} from './form-img-upload-slider.js';
+import { isEscapeKey } from './util.js';
+import { onFormClickScaleButtons, updateImageScale } from './form-img-upload-scale.js';
+import { onFormClickFilter, resetFilter } from './form-img-upload-slider.js';
+import { resetPristin } from './form-img-upload-sending-data.js';
 
 const form = document.querySelector('.img-upload__form');
 const formImgUploadInput = form.querySelector('.img-upload__input');
@@ -11,23 +11,98 @@ const formImgUploadWrapper = formImgUploadOverlay.querySelector('.img-upload__wr
 const formImgPreviewContainer = formImgUploadWrapper.querySelector('.img-upload__preview-container');
 const formImgUploadPreview = formImgPreviewContainer.querySelector('.img-upload__preview');
 const formImgUploadCancel = formImgUploadOverlay.querySelector('.img-upload__cancel');
-
-const formTextHashtags = formImgUploadOverlay.querySelector('.text__hashtags');
-const formTextDescription = formImgUploadOverlay.querySelector('.text__description');
-
 const formImgUploadScale = formImgUploadWrapper.querySelector('.img-upload__scale');
-const formScaleControlValue = formImgUploadScale.querySelector('.scale__control--value');
-
 const imgUploadEffects = formImgUploadWrapper.querySelector('.img-upload__effects');
 const slider = formImgUploadWrapper.querySelector('.img-upload__effect-level');
+const previews = formImgUploadWrapper.querySelectorAll('.effects__preview');
 
+
+const showError = () => {
+  const existingError = document.querySelector('.data-error');
+  if (existingError) {
+    existingError.remove();
+  }
+
+  const errorTemplate = document.getElementById('data-error');
+  const clone = document.importNode(errorTemplate.content, true);
+  const errorElement = document.createElement('div');
+  errorElement.appendChild(clone);
+  document.body.appendChild(errorElement);
+  const errorText = document.body.querySelector('.data-error__title');
+  errorText.textContent = 'Не верный формат файла. Загружайте: .jpg / .jpeg / .png';
+
+  setTimeout(() => {
+    errorElement.remove();
+  }, 2000);
+};
+
+const openForm = () => {
+  const file = formImgUploadInput.files[0];
+  const fileName = file ? file.name.toLowerCase() : '';
+
+  if (file && (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png'))) {
+    const fileURL = URL.createObjectURL(file);
+    formImgUploadPreview.querySelector('img').src = fileURL;
+
+    previews.forEach((preview) => {
+      preview.style.backgroundImage = `url(${fileURL})`;
+      preview.style.backgroundSize = 'cover';
+    });
+
+    document.body.classList.add('modal-open');
+    formImgUploadOverlay.classList.remove('hidden');
+    slider.classList.add('hidden');
+
+    formImgUploadCancel.addEventListener('click', onFormClickCancel);
+    document.addEventListener('keydown', onFormEsc);
+
+    formImgUploadScale.addEventListener('click', onFormClickScaleButtons);
+    imgUploadEffects.addEventListener('change', onFormClickFilter);
+  } else {
+    showError();
+    formImgUploadInput.value = '';
+  }
+};
+
+const resetForm = () => {
+  form.reset();
+  formImgUploadPreview.querySelector('img').src = 'img/upload-default-image.jpg';
+  previews.forEach((preview) => {
+    preview.style.backgroundImage = '';
+    preview.style.backgroundSize = '';
+  });
+  resetFilter();
+  updateImageScale(100);
+  resetPristin();
+};
+
+const closeForm = (isError) => {
+  document.body.classList.remove('modal-open');
+  formImgUploadOverlay.classList.add('hidden');
+
+  if (!isError) {
+    formImgUploadCancel.removeEventListener('click', onFormClickCancel);
+    document.removeEventListener('keydown', onFormEsc);
+    formImgUploadScale.removeEventListener('click', onFormClickScaleButtons);
+    imgUploadEffects.removeEventListener('change', onFormClickFilter);
+
+    resetForm();
+  }
+};
 
 function onFormEsc (evt) {
-  if (
-    isEscapeKey(evt)
-    && !document.activeElement.querySelector('.text__hashtags')
-    && !document.activeElement.querySelector('.text__description')
-  ) {
+
+  if (isEscapeKey(evt) && !formImgUploadOverlay.classList.contains('hidden')) {
+
+    const hashtagsInput = form.querySelector('.text__hashtags');
+    const descriptionInput = form.querySelector('.text__description');
+
+    if (document.activeElement === hashtagsInput || document.activeElement === descriptionInput) {
+
+      evt.preventDefault();
+      return;
+    }
+
     evt.preventDefault();
     closeForm();
   }
@@ -38,59 +113,9 @@ function onFormClickCancel (evt) {
   closeForm();
 }
 
-formImgUploadInput.addEventListener ('change', (evt) =>{
+formImgUploadInput.addEventListener('change', (evt) => {
   evt.preventDefault();
   openForm();
 });
 
-function resetForm () {
-  formImgUploadInput.value = null;
-  formTextHashtags.value = null;
-  formTextDescription.value = null;
-  formScaleControlValue.value = '100%';
-
-  resetFilter();
-  updateImageScale(100);
-}
-
-function openForm () {
-  formImgUploadOverlay.classList.remove('hidden');
-  slider.classList.add('hidden');
-
-  formImgUploadCancel.addEventListener('click', onFormClickCancel);
-  document.addEventListener('keydown', onFormEsc);
-  formImgUploadScale.addEventListener('click', onFormClickScaleButtons);
-  imgUploadEffects.addEventListener('change', onFormClickFilter);
-
-  const file = formImgUploadInput.files[0];
-  const imageURL = URL.createObjectURL(file);
-  formImgUploadPreview.querySelector('img').src = imageURL;
-}
-
-function closeForm () {
-  formImgUploadOverlay.classList.add('hidden');
-
-  formImgUploadCancel.removeEventListener('click', onFormClickCancel);
-  document.removeEventListener('keydown', onFormEsc);
-  formImgUploadScale.removeEventListener('click', onFormClickScaleButtons);
-  imgUploadEffects.removeEventListener('change', onFormClickFilter);
-
-  resetForm();
-}
-
-const pristine = new Pristine (form, {
-  classTo: 'img-upload__field-wrapper',
-  errorClass: 'img-upload__field-wrapper--error',
-  errorTextParent: 'img-upload__field-wrapper',
-});
-
-
-pristine.addValidator(form.querySelector('.text__hashtags'), validateHashtags, getErrorText);
-pristine.addValidator(form.querySelector('.text__description'), validateDescription, getErrorText);
-
-form.addEventListener('submit', (evt) => {
-  const isValid = pristine.validate();
-  if (!isValid) {
-    evt.preventDefault();
-  }
-});
+export { closeForm };
